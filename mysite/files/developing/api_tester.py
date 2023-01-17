@@ -2,8 +2,8 @@ import requests
 import json
 
 URL = "http://rodrigobilbeny.pythonanywhere.com"
-payload = {"input" : "list of clubs"}
+payload = {"clubs" : "list of clubs"}
 
-response = requests.get(URL, params=payload)
-
+response = requests.post(URL, params=payload)
+print(response)
 print(response.json())
