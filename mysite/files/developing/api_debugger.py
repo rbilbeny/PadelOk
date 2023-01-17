@@ -1,8 +1,9 @@
 import json
 
+
 text = "test"
-data = {'response': text}
+data = {'clubs_saved': text}
 response_json = json.dumps(data)
 with open("files/clubs.json", 'w') as updated_clubs:
-	updated_clubs.write(response_json)
+    updated_clubs.write(response_json)
 
