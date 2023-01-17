@@ -1,10 +1,7 @@
 Title: Club Scraper
-
 Description: An API that gets as input a zone (a zone is an attribute of a Club), a time range and a date range.
 It returns a json object with a list of dates, each with a list of clubs, and each with a list of time blocks
 with available courts. The app will scrape each club's web site to gather this information.
 It also provides an endpoint to receive the clubs json file, which has a list of all the clubs with their scraping
 information
-
-
 
