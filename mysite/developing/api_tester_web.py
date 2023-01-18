@@ -1,5 +1,12 @@
-import requests
 import json
+import sys
+import requests
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent))
+from objects import Club
+
+json_path =  str(Path(__file__).parent.parent) + "/clubs.json"
 
 #request POST
 def test_post_clubs():
