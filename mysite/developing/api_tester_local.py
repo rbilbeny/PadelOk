@@ -1,10 +1,11 @@
 import json
-import local_flask_app
 import sys
 from pathlib import Path
 
+import local_flask_app
+
 sys.path.append(str(Path(__file__).parent.parent))
-from objects import Club, ClubSearch, Court, LocationSearch
+from club import Club
 
 json_path =  str(Path(__file__).parent.parent) + "/clubs.json"
 
@@ -24,7 +25,8 @@ def test_club_builder():
     with open(json_path, 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
-    test_club = Club(line,"1672937321331x524913942331468560")
+    test_club = Club(line,"1669903818955x480922479948817660")
+    print("id is " + test_club.id)
     print("name is " + test_club.name)
     print("district is " + test_club.district) 
     print("zone is " + test_club.zone) 
@@ -34,12 +36,11 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    with open(json_path, 'r') as clubs:
-        lines = clubs.readlines()
-        line = lines[0]
+    response = local_flask_app.handle_request_get_single_scraper("1669903818955x480922479948817660", "12/1/2023", "15/1/2023", "", "")
+    
+    #LOCAL EQUALS WE
+    print(response)
 
-    single_club_search = ClubSearch(line, "1672937321331x524913942331468560", "", "", "", "")
-    single_club_search.scrape()
+    
 
-test_club_builder()
 test_club_search()

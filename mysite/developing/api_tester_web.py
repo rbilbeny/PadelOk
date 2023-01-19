@@ -4,7 +4,9 @@ import requests
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from objects import Club
+from search import ClubSearch, LocationSearch
+from court import Court
+from club import Club
 
 json_path =  str(Path(__file__).parent.parent) + "/clubs.json"
 
@@ -20,6 +22,14 @@ def test_post_clubs():
     preliminar_json = json.loads(response.json()["result"])
     beautiful_json = json.dumps(preliminar_json, indent=4)
     print(beautiful_json)
+
+def test_club_search():
+    URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
+    payload = {"club_id" : "1669903818955x480922479948817660", "initial_date" : "12/1/2023", "final_date" : "15/1/2023", "initial_time" : "", "final_time" : ""}
+    response = requests.post(URL, params=payload)
+    
+    #LOCAL EQUALS WE
+    print(response)
 
 test_post_clubs()
 

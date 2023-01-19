@@ -1,9 +1,5 @@
 import requests
-
-from court import Court
-
-PROXY_ACTIVE = False
-API_KEY = ""
+import json
 
 def get_session(calendar_url):
 
@@ -120,46 +116,36 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 	
 	return calendar
 
+
 		
-def scraper(club, date, inital_time, final_time):
 
-	court_list = list()
+
+PROXY_ACTIVE = False
+API_KEY = ""
+
+calendar_url = "http://padelestorilcl.matchpoint.com.es" + "/Booking/Grid.aspx"
+id_url = "http://padelestorilcl.matchpoint.com.es" + "/booking/srvc.aspx/ObtenerCuadros"
+API_url = "http://padelestorilcl.matchpoint.com.es" + "/booking/srvc.aspx/ObtenerCuadros"
+date = "19/1/2023"
+
+session_id,cheat_code = get_session(calendar_url)
+
+id = get_id(id_url,session_id,cheat_code)	
 	
-	calendar_url = club.url_base + club.url_path_scraper
-	id_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadros"
-	API_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadros"
+calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
+print(calendar)
+calendar_ = json.dumps(calendar, indent=4)
+print(calendar_)
+
 	
-	"""
-	session_id,cheat_code = get_session(calendar_url)
-	
-	if club.url_id is None:
-		id = get_id(id_url,session_id,cheat_code)	
-	else:
-		id = club.url_id
-	
-	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
-	print(calendar)
-	calendar_ = json.dumps(calendar, indent=4)
-	print(calendar_)
+club_ = calendar["d"]["Nombre"]
+canchas = calendar["d"]["Columnas"]
 
-	club_ = calendar["d"]["Nombre"]
-	canchas = calendar["d"]["Columnas"]
-
-	print(club_, ":")
-	for cancha in canchas:
-		print(cancha["TextoPrincipal"],":")
-		disponibles = cancha["HorariosFijos"]
-		horararios_disponibles = ""
-		for disponible in disponibles:
-			horararios_disponibles = horararios_disponibles + disponible["StrHoraInicio"] + "-" + disponible["StrHoraFin"] + ", "
-		print(horararios_disponibles)	
-	"""
-
-	court_list.append(Court(club.id, date, "16:30", "18:00", "pade1", "$25.000"))
-	court_list.append(Court(club.id, date, "18:00", "19:30", "pade1", "$30.000"))
-	court_list.append(Court(club.id, date, "19:30", "21:00", "pade1", "$30.000"))
-	court_list.append(Court(club.id, date, "19:30", "21:00", "pade2", "$30.000"))
-	court_list.append(Court(club.id, date, "21:00", "22:30", "pade1", "$30.000"))
-	court_list.append(Court(club.id, date, "21:00", "22:30", "pade2", "$30.000"))
-
-	return court_list
+print(club_, ":")
+for cancha in canchas:
+	print(cancha["TextoPrincipal"],":")
+	disponibles = cancha["HorariosFijos"]
+	horararios_disponibles = ""
+	for disponible in disponibles:
+		horararios_disponibles = horararios_disponibles + disponible["StrHoraInicio"] + "-" + disponible["StrHoraFin"] + ", "
+	print(horararios_disponibles)	

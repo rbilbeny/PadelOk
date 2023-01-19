@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import request
 
+from search import ClubSearch
+
 app = Flask(__name__)
 
 
@@ -17,13 +19,29 @@ def handle_request_post_clubs():
     json_clubs = line
     return {"result" : json_clubs}
 
+
+
+
 @app.route('/get_single_scraper', methods=['GET'])
 def handle_request_get_single_scraper():
-    input_text = str(request.args.get('club_name'))
-    
+    club_id  = str(request.args.get('club_name'))
+    initial_date = str(request.args.get('initial_date'))
+    final_date = str(request.args.get('final_date'))
+    inital_time = str(request.args.get('initial_time'))
+    final_time = str(request.args.get('final_time'))
+
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
+    
+    #LOCAL EQUALS WEB
+    single_club_search = ClubSearch(line, club_id, initial_date, final_date, inital_time, final_time)
+    single_club_search.scrape()
+    result_list = []
+    for court in single_club_search.result:
+        result_list.append(court.__dict__)
+    json_courts = json.dumps(result_list, indent=4)
+    return json_courts    
 
 
     return {"address" : input_text}
