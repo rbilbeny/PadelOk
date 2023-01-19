@@ -44,6 +44,4 @@ def handle_request_get_single_scraper():
     return json_courts    
 
 
-    return {"address" : input_text}
-
     
