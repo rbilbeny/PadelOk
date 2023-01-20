@@ -29,7 +29,7 @@ def test_club_search():
     response = requests.get(URL, params=payload)
     
     #LOCAL EQUALS WE
-    print(response)
+    print(response.text)
 
 test_club_search()
 
