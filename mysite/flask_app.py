@@ -37,8 +37,9 @@ def handle_request_get_single_scraper():
     #LOCAL EQUALS WEB
     single_club_search = ClubSearch(line, club_id, initial_date, final_date, inital_time, final_time)
     single_club_search.scrape()
-    result_list = []
+    search_result_list = []
     for court in single_club_search.result:
-        result_list.append(court.__dict__)
-    json_courts = json.dumps(result_list, indent=4)
-    return json_courts
+        search_result_list.append(court.__dict__)
+    json_courts = json.dumps(search_result_list, indent=4)
+    sorted_json_courts = sorted(json_courts, key=lambda x: (x['club_id'], x['date'], x['court_name'], x['initial_time']))
+    return sorted_json_courts
