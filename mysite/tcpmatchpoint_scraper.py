@@ -123,6 +123,8 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 
 def price_to_int(price):
 	
+	if price is None or price == "":
+		return 0
 	price = price.replace("$","")
 	price = price.replace(".","")
 	price = price.replace(",",".")
@@ -149,8 +151,9 @@ def scraper(club, date, inital_time, final_time):
 
 	print("id es: "+ str(id))
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
-	#calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
-	#print(calendar_)
+	#print(calendar)
+	calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
+	print(calendar_)
 
 	club_ = calendar["d"]["Nombre"]
 	print(club_)
