@@ -49,8 +49,8 @@ class ClubSearch:
                 current_date += delta
 
             sorted_result = sorted(self.result, key=lambda x: (x['date'], x['court_name'], x['initial_time']), 
-                      key=lambda x: (x['date'], x['court_name'], x['initial_time']),
-                      reverse=[False, False, False]) 
+                      key=lambda x: (x['club_id'], x['date'], x['court_name'], x['initial_time']),
+                      reverse=[False, False, False, False]) 
 
             self.result = sorted_result       
 
