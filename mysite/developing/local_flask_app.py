@@ -7,6 +7,7 @@ from search import ClubSearch
 
 
 def handle_request_post_clubs(input_text):
+    input_text = input_text.replace("\'", "")
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'w') as clubs:
         clubs.write(input_text)
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as updated_clubs:

@@ -4,9 +4,6 @@ import requests
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from search import ClubSearch, LocationSearch
-from court import Court
-from club import Club
 
 json_path =  str(Path(__file__).parent.parent) + "/clubs.json"
 
@@ -25,7 +22,7 @@ def test_post_clubs():
 
 def test_club_search():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    payload = {"club_id" : "1669904088780x898504369661313000", "initial_date" : "23/1/2023", "final_date" :  "23/1/2023", "initial_time" : "07:30", "final_time" : "12:00"}
+    payload = {"club_id" : "1671574328074x637398410371450100", "initial_date" : "23/1/2023", "final_date" :  "23/1/2023", "initial_time" : "07:30", "final_time" : "12:00"}
     response = requests.get(URL, params=payload)
     
     #LOCAL EQUALS WEB
