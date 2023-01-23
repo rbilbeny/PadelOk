@@ -36,40 +36,10 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("1671574328074x637398410371450100", "23/1/2023", "23/1/2023", "07:30", "12:00")
+    response = local_flask_app.handle_request_get_single_scraper("1669903818955x480922479948817660", "23/1/2023", "23/1/2023", "07:30", "23:00")
+    print(response)
     
     #LOCAL EQUALS WEB
-    print(response)
-    '''ARICA: 
-    "CombinaHorariosFijosYLibres": true
-    "HorariosFijos": [lista....
-    "Id": "76",
-    "IdImagen": "",
-    "IdModalidadFijaParaReservas": 28,
-    "Observaciones": "",
-    "Ocupaciones": [ lista....
-    "PermiteElegirModalidad": false,
-    "PermitirSeleccionHorariosLibres": false,
-    "TextoPrincipal": "Padel 3 Zapping",
-    "TextoSecundario": "-",
-    "Tipo": "Recurso",
-    "rutaImagenInfo": null
+    
 
-    ESTORIL:
-    "CombinaHorariosFijosYLibres": true,
-    "HorariosFijos": [],
-    "Id": "13",
-    "IdImagen": "",
-    "IdModalidadFijaParaReservas": 3,
-    "Observaciones": "",
-    "Ocupaciones": [lista....
-    "PermiteElegirModalidad": false,
-    "PermitirSeleccionHorariosLibres": false,
-    "TextoPrincipal": "1 Nevasa",
-    "TextoSecundario": "-",
-    "Tipo": "Recurso",
-    "rutaImagenInfo": null
-
-
-    '''
 test_club_search()

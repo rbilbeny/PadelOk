@@ -1,5 +1,6 @@
 import requests
 import json
+from datetime import datetime, timedelta
 
 from court import Court
 
@@ -153,21 +154,55 @@ def scraper(club, date, inital_time, final_time):
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
 	#print(calendar)
 	calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
-	print(calendar_)
+	#print(calendar_)
 
 	club_ = calendar["d"]["Nombre"]
 	print(club_)
 	courts = calendar["d"]["Columnas"]
 	
+	if courts[0]["IdModalidadFijaParaReservas"] != 3:
+		for court in courts:
+			available_time_blocks = court["HorariosFijos"]
+			for available_time_block in available_time_blocks:
+				block_initial_time = available_time_block["StrHoraInicio"]
+				block_final_time = available_time_block["StrHoraFin"]
+				court_name = court["TextoPrincipal"]
+				block_price = price_to_int(available_time_block["TextoAdicional"])
+				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
+					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 
-	for court in courts:
-		available_courts = court["HorariosFijos"]
-		for available_court in available_courts:
-			court_initial_time = available_court["StrHoraInicio"]
-			court_final_time = available_court["StrHoraFin"]
-			court_name = court["TextoPrincipal"]
-			price = price_to_int(available_court["TextoAdicional"])
-			if (inital_time <= court_initial_time) and (final_time >= court_final_time):
-				court_list.append(Court(club.id, date, court_initial_time, court_final_time, court_name, price))
-		
+	elif courts[0]["IdModalidadFijaParaReservas"] == 3:
+		club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
+		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
+		interval = timedelta(minutes=30)
+
+		for court in courts:
+			occupied_courts = court["Ocupaciones"]
+			current_time = club_initial_time
+			while current_time <= (club_final_time-2*interval):
+				current_block = (current_time.strftime("%H:%M"), (current_time + 2*interval).strftime("%H:%M"))
+				current_block_available = True
+				for occupied_court in occupied_courts:
+					occupied_block = (occupied_court["StrHoraInicio"], occupied_court["StrHoraFin"])
+					if occupied_block[0] <= current_block[0] and occupied_block[1] >= current_block[1]:
+						current_block_available = False
+						break
+					if occupied_block[0] > current_block[0] and occupied_block[0] < current_block[1]:
+						current_block_available = False
+						break
+					if occupied_block[1] > current_block[0] and occupied_block[0] < current_block[0]:
+						current_block_available = False
+						break	
+				if current_block_available==False:
+					current_time += interval
+					continue
+				elif current_block_available==True:
+					block_initial_time = current_block[0]
+					block_final_time = current_block[1]
+					court_name = court["TextoPrincipal"]
+					block_price = 0
+					if (inital_time <= block_initial_time) and (final_time >= block_final_time):
+						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+				current_time += interval
+				
 	return court_list
