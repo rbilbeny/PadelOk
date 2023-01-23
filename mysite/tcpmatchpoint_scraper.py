@@ -174,13 +174,13 @@ def scraper(club, date, inital_time, final_time):
 				block_price = price_to_int(available_time_block["TextoAdicional"])
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
 					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-
+	
 	elif courts[0]["IdModalidadFijaParaReservas"] == 3:	
 		court_list.append(Court(club.id, date, "hola", "hola", "hola", 4000))
 		club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
 		interval = timedelta(minutes=30)
-
+		
 		for court in courts:
 			occupied_courts = court["Ocupaciones"]
 			current_time = club_initial_time
@@ -208,6 +208,6 @@ def scraper(club, date, inital_time, final_time):
 					block_price = 0
 					if (inital_time <= block_initial_time) and (final_time >= block_final_time):
 						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-				current_time += interval
-				
+					current_time += interval
+
 	return court_list
