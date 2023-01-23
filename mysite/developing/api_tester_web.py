@@ -26,7 +26,7 @@ def test_club_search():
     response = requests.get(URL, params=payload)
     
     #LOCAL EQUALS WEB
-    print(response.text)
+    print(response.json())
 
 test_club_search()
 
