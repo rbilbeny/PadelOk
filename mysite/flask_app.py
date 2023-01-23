@@ -31,7 +31,7 @@ def handle_request_post_clubs():
 @app.route('/get_single_scraper', methods=['GET'])
 def handle_request_get_single_scraper():
     club_id  = str(request.args.get('club_id'))
-    date = str(request.args.get('date'))
+    search_date = str(request.args.get('date'))
     inital_time = str(request.args.get('initial_time'))
     final_time = str(request.args.get('final_time'))
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
@@ -40,7 +40,7 @@ def handle_request_get_single_scraper():
 
     #LOCAL EQUALS WEB
     club = Club(line, club_id)
-    single_club_search = ClubSearch(club, date, inital_time, final_time)
+    single_club_search = ClubSearch(club, search_date, inital_time, final_time)
     single_club_search.scrape()
     search_result_list = []
     for court in single_club_search.result:
