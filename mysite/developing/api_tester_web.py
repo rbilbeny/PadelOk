@@ -28,5 +28,5 @@ def test_club_search():
     #LOCAL EQUALS WEB
     print(response.text)
 
-test_post_clubs()
+test_club_search()
 
