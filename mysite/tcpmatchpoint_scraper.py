@@ -122,6 +122,8 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 	
 	return calendar
 
+
+
 def price_to_int(price):
 	
 	if price is None or price == "":
@@ -131,6 +133,8 @@ def price_to_int(price):
 	price = price.replace(",",".")
 	
 	return int(price)
+
+
 		
 def scraper(club, date, inital_time, final_time):
 
