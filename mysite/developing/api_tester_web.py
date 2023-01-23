@@ -22,7 +22,7 @@ def test_post_clubs():
 
 def test_club_search():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    payload = {"club_id" : "1669903818955x480922479948817660", "initial_date" : "23/1/2023", "final_date" :  "23/1/2023", "initial_time" : "07:00", "final_time" : "23:00"}
+    payload = {"club_id" : "1672937321331x524913942331468560", "initial_date" : "23/1/2023", "final_date" :  "23/1/2023", "initial_time" : "07:00", "final_time" : "23:00"}
     response = requests.get(URL, params=payload)
     
     #LOCAL EQUALS WEB

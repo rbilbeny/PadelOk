@@ -164,9 +164,11 @@ def scraper(club, date, inital_time, final_time):
 	print(club_)
 	courts = calendar["d"]["Columnas"]
 
-	if courts[0]["IdModalidadFijaParaReservas"] != 3:
-		for court in courts:
-			available_time_blocks = court["HorariosFijos"]
+	
+	for court in courts:
+		available_time_blocks = court["HorariosFijos"]
+		
+		if len(available_time_blocks) != 0:
 			for available_time_block in available_time_blocks:
 				block_initial_time = available_time_block["StrHoraInicio"]
 				block_final_time = available_time_block["StrHoraFin"]
@@ -175,12 +177,11 @@ def scraper(club, date, inital_time, final_time):
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
 					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 
-	elif courts[0]["IdModalidadFijaParaReservas"] == 3:
-		club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
-		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
-		interval = timedelta(minutes=30)
+		else:
+			club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
+			club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
+			interval = timedelta(minutes=30)
 
-		for court in courts:
 			occupied_courts = court["Ocupaciones"]
 			current_time = club_initial_time
 			while current_time <= (club_final_time-2*interval):
