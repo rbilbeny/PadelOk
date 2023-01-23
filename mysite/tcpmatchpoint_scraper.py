@@ -29,13 +29,13 @@ def get_session(calendar_url):
 				break
 		except:
 			pass
-	
+
 	html=response.text
-	
+
 	cheat_code=html.split("heatCode='")[1].split("';")[0]
-	
+
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
-		
+
 	return session_id,cheat_code
 
 
@@ -71,25 +71,25 @@ def get_id(id_url,session_id,cheat_code):
 				response = requests.post(id_url,cookies=cookies,headers=headers,json=json_data,verify=False)
 			if response.status_code==200:
 				break
-			
+
 		except:
 			pass
-	
+
 	id=response.json()["d"][0]["Id"]
-	
+
 	return id
 
 
 
 def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 
-	cookies = {
+    cookies = {
     'ASP.NET_SessionId': session_id,
     'i18next': 'es-CL',
     'MPOpcionCookie': 'necesarios',
-	}
+    }
 
-	headers = {
+    headers = {
 		'Accept': 'application/json, text/javascript, */*; q=0.01',
 		'Accept-Language': 'en-US,en;q=0.9,ar-TN;q=0.8,ar;q=0.7',
 		'Cache-Control': 'no-cache',
@@ -107,31 +107,31 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 		'sec-ch-ua-platform': '"Windows"',
 	}
 
-	json_data = {
+    json_data = {
 		'idCuadro': id,
 		'fecha': date,
 		'p': cheat_code,
 	}
-	
-	if PROXY_ACTIVE:
-		response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
-	else:
-		response = requests.post(API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
-	
-	calendar=response.json()
-	
-	return calendar
+
+    if PROXY_ACTIVE:
+	    response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+    else:
+	    response = requests.post(API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+
+    calendar=response.json()
+
+    return calendar
 
 
 
 def price_to_int(price):
-	
+
 	if price is None or price == "":
 		return 0
 	price = price.replace("$","")
 	price = price.replace(".","")
 	price = price.replace(",",".")
-	
+
 	return int(price)
 
 
@@ -139,17 +139,17 @@ def price_to_int(price):
 def scraper(club, date, inital_time, final_time):
 
 	court_list = list()
-	
+
 	calendar_url = club.url_base + club.url_path_scraper
 	print(calendar_url)
 	id_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadros"
 	API_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadro"
-	
+
 	session_id,cheat_code = get_session(calendar_url)
-	
+
 	if club.url_id is None:
 		id = get_id(id_url,session_id,cheat_code)
-		print("id obtenido")	
+		print("id obtenido")
 	else:
 		id = club.url_id
 		print("id forzado")
@@ -163,7 +163,7 @@ def scraper(club, date, inital_time, final_time):
 	club_ = calendar["d"]["Nombre"]
 	print(club_)
 	courts = calendar["d"]["Columnas"]
-	
+
 	if courts[0]["IdModalidadFijaParaReservas"] != 3:
 		for court in courts:
 			available_time_blocks = court["HorariosFijos"]
@@ -175,7 +175,7 @@ def scraper(club, date, inital_time, final_time):
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
 					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 
-	elif courts[0]["IdModalidadFijaParaReservas"] == 3:	
+	elif courts[0]["IdModalidadFijaParaReservas"] == 3:
 		court_list.append(Court(club.id, date, "hola", "hola", "hola", 4000))
 		club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
@@ -197,7 +197,7 @@ def scraper(club, date, inital_time, final_time):
 						break
 					if occupied_block[1] > current_block[0] and occupied_block[0] < current_block[0]:
 						current_block_available = False
-						break	
+						break
 				if current_block_available==False:
 					current_time += interval
 					continue
