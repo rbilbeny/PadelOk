@@ -176,6 +176,7 @@ def scraper(club, date, inital_time, final_time):
 					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 
 	elif courts[0]["IdModalidadFijaParaReservas"] == 3:
+		court_list.append(Court(club.id, date, "hola", "hola", "hola", 4000))
 		club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
 		interval = timedelta(minutes=30)
