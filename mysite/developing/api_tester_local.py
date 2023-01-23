@@ -36,7 +36,7 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("1672937321331x524913942331468560", "23/1/2023", "23/1/2023", "07:00", "23:00")
+    response = local_flask_app.handle_request_get_single_scraper("1672937321331x524913942331468560", "24/1/2023", "24/1/2023", "07:00", "23:00")
     
     #LOCAL EQUALS WEB
     print(response)
