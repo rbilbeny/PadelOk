@@ -83,13 +83,13 @@ def get_id(id_url,session_id,cheat_code):
 
 def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 
-    cookies = {
-    'ASP.NET_SessionId': session_id,
-    'i18next': 'es-CL',
-    'MPOpcionCookie': 'necesarios',
-    }
+	cookies = {
+	'ASP.NET_SessionId': session_id,
+	'i18next': 'es-CL',
+	'MPOpcionCookie': 'necesarios',
+	}
 
-    headers = {
+	headers = {
 		'Accept': 'application/json, text/javascript, */*; q=0.01',
 		'Accept-Language': 'en-US,en;q=0.9,ar-TN;q=0.8,ar;q=0.7',
 		'Cache-Control': 'no-cache',
@@ -107,20 +107,20 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 		'sec-ch-ua-platform': '"Windows"',
 	}
 
-    json_data = {
+	json_data = {
 		'idCuadro': id,
 		'fecha': date,
 		'p': cheat_code,
 	}
 
-    if PROXY_ACTIVE:
-	    response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
-    else:
-	    response = requests.post(API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+	if PROXY_ACTIVE:
+		response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+	else:
+		response = requests.post(API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
 
-    calendar=response.json()
+	calendar=response.json()
 
-    return calendar
+	return calendar
 
 
 
