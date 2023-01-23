@@ -37,17 +37,25 @@ def test_club_builder():
     
 def test_club_search(): 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     response = local_flask_app.handle_request_get_single_scraper("1669903818955x480922479948817660", "23/1/2023", "23/1/2023", "07:30", "23:00")
     print(response)
     
     #LOCAL EQUALS WEB
     
 =======
+=======
+>>>>>>> Stashed changes
     response = local_flask_app.handle_request_get_single_scraper("1669903818955x480922479948817660", "23/1/2023", "23/1/2023", "07:00", "23:00")
     
     #LOCAL EQUALS WEB
     print(response)
+<<<<<<< Updated upstream
 
 >>>>>>> Stashed changes
 
+=======
+
+
+>>>>>>> Stashed changes
 test_club_search()
