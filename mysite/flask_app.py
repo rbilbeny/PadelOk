@@ -1,7 +1,10 @@
 from flask import Flask
 from flask import request
 import json
+import sys
+from pathlib import Path
 
+sys.path.append(str(Path(__file__).parent))
 from search import ClubSearch
 
 app = Flask(__name__)
