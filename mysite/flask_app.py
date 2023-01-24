@@ -48,3 +48,30 @@ def handle_request_get_single_scraper():
     
     json_courts = json.dumps(search_result_list, indent=4)
     return json_courts
+
+
+
+
+@app.route('/post_multi_scraper1', methods=['POST'])
+def handle_request_post_multi_scraper1():
+    clubs_ids_text = str(request.args.get('clubs_ids'))
+    search_date = str(request.args.get('date'))
+    inital_time = str(request.args.get('initial_time'))
+    final_time = str(request.args.get('final_time'))
+    with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
+        lines = clubs.readlines()
+        line = lines[0]
+
+    #LOCAL EQUALS WEB
+    clubs_ids_list = clubs_ids_text.split(", ")
+    multisearch_result_list = list()
+
+    for club_id in clubs_ids_list:
+        club = Club(line, club_id)
+        single_club_search = ClubSearch(club, search_date, inital_time, final_time)
+        single_club_search.scrape()
+        for court in single_club_search.result:
+            multisearch_result_list.append(court.__dict__)
+
+    json_courts = json.dumps(multisearch_result_list, indent=4)
+    return json_courts

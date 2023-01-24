@@ -41,12 +41,11 @@ def test_club_search():
     #LOCAL EQUALS WEB
     print(response)
 
-def test_multi_search(): 
+def test_multi_search1(): 
     lista_text = "1669903818955x480922479948817660, 1669904088780x898504369661313000, 1672937321331x524913942331468560"
-    lista = lista_text.split(", ")
-    response = local_flask_app.handle_request_get_multi_scraper(lista, "24/1/2023", "24/1/2023", "16:00", "19:00")
+    response = local_flask_app.handle_request_post_multi_scraper1(lista_text, "25/1/2023", "16:00", "19:00")
     
     #LOCAL EQUALS WEB
     print(response)
 
-test_club_search()
+test_multi_search1()

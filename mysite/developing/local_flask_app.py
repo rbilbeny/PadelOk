@@ -38,21 +38,29 @@ def handle_request_get_single_scraper(club_id, date, inital_time, final_time):
     json_courts = json.dumps(search_result_list, indent=4)
     return json_courts
 
-'''
-def handle_request_get_multi_scraper(clubs_ids, initial_date, final_date, inital_time, final_time): 
+
+def handle_request_post_multi_scraper1(clubs_ids, date, inital_time, final_time): 
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
     
     #LOCAL EQUALS WEB
-            start_date = datetime.strptime(self.initial_date, "%d/%m/%Y")
-            end_date = datetime.strptime(self.final_date, "%d/%m/%Y")
-            delta = timedelta(days=1)
-            current_date = start_date
-            while current_date <= end_date:
-                self.result.extend(tcp_scraper(self.club, current_date.strftime("%d/%m/%Y"), self.initial_time, self.final_time))
-                current_date += delta   
+    search_date = date
+    clubs_ids_list = clubs_ids.split(", ")
+    multisearch_result_list = list()
+
+    for club_id in clubs_ids_list:
+        club = Club(line, club_id)
+        single_club_search = ClubSearch(club, search_date, inital_time, final_time)
+        single_club_search.scrape()
+        for court in single_club_search.result:
+            multisearch_result_list.append(court.__dict__)  
 
     json_courts = json.dumps(multisearch_result_list, indent=4)
     return json_courts
-'''    
+
+'''
+            start_date = datetime.strptime(self.initial_date, "%d/%m/%Y")
+            end_date = datetime.strptime(self.final_date, "%d/%m/%Y")
+            delta = timedelta(days=1)
+'''                

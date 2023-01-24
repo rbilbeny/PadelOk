@@ -29,5 +29,15 @@ def test_club_search():
     print(response)
     print(json.dumps(response.json(), indent=4))
 
-test_club_search()
+def test_multi_search1(): 
+    lista_text = "1669903818955x480922479948817660, 1669904088780x898504369661313000, 1672937321331x524913942331468560"
+    URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper1"
+    payload = {"clubs_ids" : lista_text, "date" : "25/1/2023", "initial_time" : "16:00", "final_time" : "19:00"}
+    response = requests.get(URL, params=payload)
+
+    #LOCAL EQUALS WEB
+    print(response)
+    print(json.dumps(response.json(), indent=4))    
+
+test_multi_search1()
 
