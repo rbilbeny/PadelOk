@@ -9,7 +9,7 @@ from search import ClubSearch
 from club import Club
 
 app = Flask(__name__)
-
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
 
 @app.route('/post_clubs', methods=['POST'])
 def handle_request_post_clubs():
