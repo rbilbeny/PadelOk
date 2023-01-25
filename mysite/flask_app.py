@@ -54,10 +54,10 @@ def handle_request_get_single_scraper():
 
 @app.route('/post_multi_scraper1', methods=['POST'])
 def handle_request_post_multi_scraper1():
-    clubs_ids_text = str(request.args.get('clubs_ids'))
-    search_date = str(request.args.get('date'))
-    inital_time = str(request.args.get('initial_time'))
-    final_time = str(request.args.get('final_time'))
+    clubs_ids_text = str(request.form.get('clubs_ids'))
+    search_date = str(request.form.get('date'))
+    inital_time = str(request.form.get('initial_time'))
+    final_time = str(request.form.get('final_time'))
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
