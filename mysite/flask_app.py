@@ -13,7 +13,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
 
 @app.route('/post_clubs', methods=['POST'])
 def handle_request_post_clubs():
-    input_text = str(request.get_data())
+    input_text = str(request.form.get('clubs'))
     input_text = input_text.replace('\\', "")
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'w') as clubs:
         clubs.write(input_text)
@@ -72,6 +72,3 @@ def handle_request_post_multi_scraper1():
         single_club_search.scrape()
         for court in single_club_search.result:
             multisearch_result_list.append(court.__dict__)
-
-    json_courts = json.dumps(multisearch_result_list, indent=4)
-    return json_courts
