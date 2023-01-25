@@ -136,7 +136,7 @@ def price_to_int(price):
 
 
 
-def scraper(club, date, inital_time, final_time):
+def scraper(searh_type, club, date, inital_time, final_time):
 
 	court_list = list()
 
@@ -175,7 +175,13 @@ def scraper(club, date, inital_time, final_time):
 				court_name = court["TextoPrincipal"]
 				block_price = price_to_int(available_time_block["TextoAdicional"])
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
-					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+					if searh_type == "all_courts":
+						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+					elif searh_type == "one_court_per_time_block":
+						matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
+						if matching_court == None:
+							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+						
 
 		elif club.web_scraper == "tcpmatchpoint-free":
 			club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
@@ -207,7 +213,12 @@ def scraper(club, date, inital_time, final_time):
 					court_name = court["TextoPrincipal"]
 					block_price = 0
 					if (inital_time <= block_initial_time) and (final_time >= block_final_time):
-						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+						if searh_type == "all_courts":
+							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+						elif searh_type == "one_court_per_time_block":
+							matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
+							if matching_court == None:
+								court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 					current_time += interval
 
 	return court_list

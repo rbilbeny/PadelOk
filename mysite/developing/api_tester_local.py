@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 from pathlib import Path
 
 import local_flask_app
@@ -36,18 +37,24 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("1669904088780x898504369661313000", "26/1/2023", "07:00", "23:00")
+    response = local_flask_app.handle_request_get_single_scraper("one_court_per_time_block", "1669903818955x480922479948817660", "26/1/2023", "07:00", "23:00")
     
     #LOCAL EQUALS WEB
     print(response)
     print("Total courts found: " + str(len(json.loads(response)))) 
 
 def test_multi_search1(): 
-    lista_text = "1669903818955x480922479948817660, 1669904088780x898504369661313000, 1672937321331x524913942331468560"
-    response = local_flask_app.handle_request_post_multi_scraper1(lista_text, "26/1/2023", "05:00", "23:00")
+    lista_text = "1669903818955x480922479948817660, 1669904088780x898504369661313000, 1671574328074x637398410371450100"
+    start_time = time.time()
+    response = local_flask_app.handle_request_post_multi_scraper1("one_court_per_time_block", lista_text, "26/1/2023", "05:00", "23:00")
+    duration = time.time() - start_time
+    clubs_list = lista_text.split(", ")
+    total_clubs = len(clubs_list)
+    
     
     #LOCAL EQUALS WEB
     print(response)
     print("Total courts found: " + str(len(json.loads(response)))) 
+    print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
-test_club_search()
+test_multi_search1()
