@@ -23,7 +23,7 @@ def test_post_clubs():
 
 def test_club_search():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    params = {"search_type" : "all_courts", "club_id" : "1671573721228x274856123451891360", "date" : "26/1/2023", "initial_time" : "07:00", "final_time" : "23:00"}
+    params = {"search_type" : "all", "club_id" : "1669903818955x480922479948817660", "date" : "26/1/2023", "initial_time" : "07:00", "final_time" : "23:00"}
     response = requests.get(URL, params=params)
     
     #LOCAL EQUALS WEB
@@ -34,7 +34,7 @@ def test_club_search():
 def test_multi_search1(): 
     lista_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
     URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper1"
-    params = {"search_type" : "all_courts"}
+    params = {"search_type" : "one_court_per_time_block"}
     data = {"clubs_ids" : lista_text, "date" : "26/1/2023", "initial_time" : "16:00", "final_time" : "23:00"}
     start_time = time.time()
     response = requests.post(URL, data=data, params=params)
@@ -68,5 +68,5 @@ def test_multi_search2():
     print("Total courts found: " + str(len(response.json())))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
-test_multi_search2()
+test_club_search()
 
