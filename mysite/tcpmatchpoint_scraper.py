@@ -168,7 +168,7 @@ def scraper(club, date, inital_time, final_time):
 	for court in courts:
 		available_time_blocks = court["HorariosFijos"]
 		
-		if len(available_time_blocks) != 0:
+		if club.web_scraper == "tcpmatchpoint-fixed":
 			for available_time_block in available_time_blocks:
 				block_initial_time = available_time_block["StrHoraInicio"]
 				block_final_time = available_time_block["StrHoraFin"]
@@ -177,7 +177,7 @@ def scraper(club, date, inital_time, final_time):
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
 					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 
-		else:
+		elif club.web_scraper == "tcpmatchpoint-free":
 			club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 			club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
 			interval = timedelta(minutes=30)

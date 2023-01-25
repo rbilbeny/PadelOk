@@ -14,7 +14,7 @@ class ClubSearch:
         self.result = list()
 
     def scrape(self):
-        if self.club.web_scraper == "tcpmatchpoint":
+        if self.club.web_scraper == "tcpmatchpoint-fixed" or self.club.web_scraper == "tcpmatchpoint-free":
             self.result = tcp_scraper(self.club, self.date, self.initial_time, self.final_time)
 
         else:
