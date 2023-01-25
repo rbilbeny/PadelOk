@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -73,4 +74,48 @@ def handle_request_post_multi_scraper1():
         for court in single_club_search.result:
             multisearch_result_list.append(court.__dict__)
 
-    return multisearch_result_list      
+    json_courts = json.dumps(multisearch_result_list, indent=4)
+    return json_courts
+
+
+
+
+@app.route('/post_multi_scraper2', methods=['POST'])
+def handle_request_post_multi_scraper2():
+    clubs_ids_text = request.form.get('clubs_ids')
+    search_date = request.form.get('date')
+    inital_time = request.form.get('initial_time')
+    final_time = request.form.get('final_time')
+    with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
+        lines = clubs.readlines()
+        line = lines[0]
+
+    #LOCAL EQUALS WEB
+    clubs_ids_list = clubs_ids_text.split(", ")
+    multisearch_result_list = list()
+    multisearch_result_list = asyncio.get_event_loop().run_until_complete(scrape_all_clubs(line, clubs_ids_list, search_date, inital_time, final_time))
+
+    json_courts = json.dumps(multisearch_result_list, indent=4)
+    return json_courts
+
+async def scrape_all_clubs(line, clubs_ids_list, search_date, inital_time, final_time):
+    multisearch_result_list = list()
+    tasks = []
+    for club_id in clubs_ids_list:
+        task = asyncio.ensure_future(scrape_one_club(line, club_id, search_date, inital_time, final_time))
+        tasks.append(task)
+    await asyncio.gather(*tasks)    
+    for task in tasks:
+        for court in task:
+            multisearch_result_list.append(court)
+    return multisearch_result_list    
+
+async def scrape_one_club(line, club_id, search_date, inital_time, final_time):
+    single_result_list = list()
+    club = Club(line, club_id)
+    single_club_search = ClubSearch(club, search_date, inital_time, final_time)
+    single_club_search.scrape()
+    for court in single_club_search.result:
+        single_result_list.append(court.__dict__)
+    return single_result_list    
+    

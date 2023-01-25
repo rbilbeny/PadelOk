@@ -18,7 +18,7 @@ class ClubSearch:
             self.result = tcp_scraper(self.club, self.date, self.initial_time, self.final_time)
 
         else:
-            return    
+            return
 
 
         
