@@ -136,7 +136,20 @@ def price_to_int(price):
 
 
 
-def scraper(searh_type, club, date, inital_time, final_time):
+def is_current_block_available(current_block, occupied_courts):
+	for occupied_court in occupied_courts:
+		occupied_block = (occupied_court["StrHoraInicio"], occupied_court["StrHoraFin"])
+		if occupied_block[0] <= current_block[0] and occupied_block[1] >= current_block[1]:
+			return False
+		if occupied_block[0] > current_block[0] and occupied_block[0] < current_block[1]:
+			return False
+		if occupied_block[1] > current_block[0] and occupied_block[0] < current_block[0]:
+			return False
+	return True	
+
+
+
+def scraper(search_type, club, date, inital_time, final_time):
 
 	court_list = list()
 
@@ -162,63 +175,67 @@ def scraper(searh_type, club, date, inital_time, final_time):
 
 	club_ = calendar["d"]["Nombre"]
 	print(club_)
-	courts = calendar["d"]["Columnas"]
-
 	
+	courts = calendar["d"]["Columnas"]
+	club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
+	club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
+	interval = timedelta(minutes=30)
+
 	for court in courts:
+		court_name = court["TextoPrincipal"]
 		available_time_blocks = court["HorariosFijos"]
+		occupied_courts = court["Ocupaciones"]
 		
-		if club.web_scraper == "tcpmatchpoint-fixed":
+		if club.web_scraper == "tcpmatchpoint-fixed" and search_type == "all_courts":
 			for available_time_block in available_time_blocks:
 				block_initial_time = available_time_block["StrHoraInicio"]
 				block_final_time = available_time_block["StrHoraFin"]
-				court_name = court["TextoPrincipal"]
 				block_price = price_to_int(available_time_block["TextoAdicional"])
 				if (inital_time <= block_initial_time) and (final_time >= block_final_time):
-					if searh_type == "all_courts":
+					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+
+		elif club.web_scraper == "tcpmatchpoint-fixed" and search_type == "one_court_per_time_block":
+			for available_time_block in available_time_blocks:
+				block_initial_time = available_time_block["StrHoraInicio"]
+				block_final_time = available_time_block["StrHoraFin"]
+				block_price = price_to_int(available_time_block["TextoAdicional"])
+				if (inital_time <= block_initial_time) and (final_time >= block_final_time):					
+					matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
+					if matching_court == None:
 						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-					elif searh_type == "one_court_per_time_block":
-						matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
-						if matching_court == None:
-							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
 						
-
-		elif club.web_scraper == "tcpmatchpoint-free":
-			club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
-			club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
-			interval = timedelta(minutes=30)
-
-			occupied_courts = court["Ocupaciones"]
+		elif club.web_scraper == "tcpmatchpoint-free" and search_type == "all_courts":
 			current_time = club_initial_time
 			while current_time <= (club_final_time-2*interval):
 				current_block = (current_time.strftime("%H:%M"), (current_time + 2*interval).strftime("%H:%M"))
-				current_block_available = True
-				for occupied_court in occupied_courts:
-					occupied_block = (occupied_court["StrHoraInicio"], occupied_court["StrHoraFin"])
-					if occupied_block[0] <= current_block[0] and occupied_block[1] >= current_block[1]:
-						current_block_available = False
-						break
-					if occupied_block[0] > current_block[0] and occupied_block[0] < current_block[1]:
-						current_block_available = False
-						break
-					if occupied_block[1] > current_block[0] and occupied_block[0] < current_block[0]:
-						current_block_available = False
-						break
+				current_block_available = is_current_block_available(current_block, occupied_courts)
 				if current_block_available==False:
 					current_time += interval
 					continue
 				elif current_block_available==True:
 					block_initial_time = current_block[0]
 					block_final_time = current_block[1]
-					court_name = court["TextoPrincipal"]
 					block_price = 0
 					if (inital_time <= block_initial_time) and (final_time >= block_final_time):
-						if searh_type == "all_courts":
-							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-						elif searh_type == "one_court_per_time_block":
-							matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
-							if matching_court == None:
-								court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))		
 					current_time += interval
 
-	return court_list
+		elif club.web_scraper == "tcpmatchpoint-free" and search_type == "one_court_per_time_block":
+			current_time = club_initial_time
+			while current_time <= (club_final_time-2*interval):
+				current_block = (current_time.strftime("%H:%M"), (current_time + 2*interval).strftime("%H:%M"))
+				current_block_available = is_current_block_available(current_block, occupied_courts)
+				if current_block_available==False:
+					current_time += interval
+					continue
+				elif current_block_available==True:
+					block_initial_time = current_block[0]
+					block_final_time = current_block[1]
+					block_price = 0
+					if (inital_time <= block_initial_time) and (final_time >= block_final_time):
+						matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
+						if matching_court == None:
+							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+					current_time += interval
+
+	return court_list			
