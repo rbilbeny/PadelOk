@@ -44,9 +44,9 @@ def test_club_search():
     print("Total courts found: " + str(len(json.loads(response)))) 
 
 def test_multi_search1(): 
-    lista_text = "1669903818955x480922479948817660, 1669904088780x898504369661313000, 1671574328074x637398410371450100"
+    lista_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
     start_time = time.time()
-    response = local_flask_app.handle_request_post_multi_scraper1("one_court_per_time_block", lista_text, "26/1/2023", "05:00", "23:00")
+    response = local_flask_app.handle_request_post_multi_scraper1("one_court_per_time_block", lista_text, "27/1/2023", "17:00", "19:00")
     duration = time.time() - start_time
     clubs_list = lista_text.split(", ")
     total_clubs = len(clubs_list)
@@ -57,4 +57,4 @@ def test_multi_search1():
     print("Total courts found: " + str(len(json.loads(response)))) 
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
-test_club_search()
+test_multi_search1()

@@ -56,7 +56,7 @@ def handle_request_get_single_scraper():
 
 @app.route('/post_multi_scraper1', methods=['POST'])
 def handle_request_post_multi_scraper1():
-    search_type = str(request.args.get('search_type'))
+    search_type = request.form.get('search_type')
     clubs_ids_text = request.form.get('clubs_ids')
     search_date = request.form.get('date')
     inital_time = request.form.get('initial_time')
@@ -84,7 +84,7 @@ def handle_request_post_multi_scraper1():
 
 @app.route('/post_multi_scraper2', methods=['POST'])
 def handle_request_post_multi_scraper2():
-    search_type = str(request.args.get('search_type'))
+    search_type = request.form.get('search_type')
     clubs_ids_text = request.form.get('clubs_ids')
     search_date = request.form.get('date')
     inital_time = request.form.get('initial_time')
@@ -107,11 +107,11 @@ async def scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inita
     for club_id in clubs_ids_list:
         task = asyncio.ensure_future(scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time))
         tasks.append(task)
-    await asyncio.gather(*tasks)    
+    await asyncio.gather(*tasks)
     for task in tasks:
         for court in task:
             multisearch_result_list.append(court)
-    return multisearch_result_list    
+    return multisearch_result_list
 
 async def scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time):
     single_result_list = list()
@@ -119,6 +119,5 @@ async def scrape_one_club(search_type, line, club_id, search_date, inital_time, 
     single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time)
     single_club_search.scrape()
     for court in single_club_search.result:
-        single_result_list.append(court.__dict__)
-    return single_result_list    
-    
+        single_result_list.append(court)
+    return single_result_list
