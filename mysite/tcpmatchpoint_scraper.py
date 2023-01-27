@@ -179,6 +179,8 @@ def scraper(search_type, club, date, inital_time, final_time):
 	courts = calendar["d"]["Columnas"]
 	club_initial_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 	club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
+	if calendar["d"]["StrHoraFin"] == "00:00":
+		club_final_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")+timedelta(days=1)-timedelta(minutes=1)
 	interval = timedelta(minutes=30)
 
 	for court in courts:
