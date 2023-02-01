@@ -180,7 +180,11 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 		if fixed_block_time_interval[1] == "00:00":
 			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
 		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
-			return (fixed_block_time_interval[0], fixed_block_time_interval[1])
+			try:
+				block_price = price_to_int(fixed_block["TextoAdicional"])	
+			except:
+				block_price = 0
+			return (fixed_block_time_interval[0], fixed_block_time_interval[1], block_price)
 	return ("","")
 
 
@@ -212,7 +216,7 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	#Third scrapping step, gets the calendar of the club for the specified date, which contains all the information needed to evaluate availability.
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
 	#print(calendar)
-	calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
+	#calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
 	#print(calendar_)
 
 	# Extracts some basic information for the club as a whole. Availabilty is evaluated at the court level.
@@ -259,6 +263,7 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 				matching_block = matching_fixed_block(current_block, fixed_time_blocks)
 				block_initial_time = matching_block[0]
 				block_final_time = matching_block[1]
+				matching_block_price = matching_block[2]
 				#print("it's inside fixed block")
 			else:	
 				block_initial_time = current_block[0]
@@ -267,8 +272,8 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 				current_time += search_resolution
 				continue
 			#print("It's not already in the list")
-			try:
-				block_price = price_to_int(court["TextoAdicional"])		
+			try :
+				block_price = matching_block_price
 			except:
 				block_price = 0
 			if block_final_time == "23:59":
@@ -279,57 +284,3 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 
 	return block_list		
 
-	"""
-		
-		if club.web_scraper == "tcpmatchpoint-fixed" and result_type == "all_courts":
-			for available_time_block in fixed_time_blocks:
-				block_initial_time = available_time_block["StrHoraInicio"]
-				block_final_time = available_time_block["StrHoraFin"]
-				block_price = price_to_int(available_time_block["TextoAdicional"])
-				if (inital_search_time <= block_initial_time) and (final_search_time >= block_final_time):
-					court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-
-		elif club.web_scraper == "tcpmatchpoint-fixed" and result_type == "one_court_per_time_block":
-			for available_time_block in fixed_time_blocks:
-				block_initial_time = available_time_block["StrHoraInicio"]
-				block_final_time = available_time_block["StrHoraFin"]
-				block_price = price_to_int(available_time_block["TextoAdicional"])
-				if (inital_search_time <= block_initial_time) and (final_search_time >= block_final_time):					
-					matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
-					if matching_court == None:
-						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-						
-		elif club.web_scraper == "tcpmatchpoint-free" and result_type == "all_courts":
-			current_time = initial_club_time
-			while current_time <= (final_club_time-2*search_resolution):
-				current_block = (current_time.strftime("%H:%M"), (current_time + 2*search_resolution).strftime("%H:%M"))
-				current_block_available = is_current_block_available(current_block, occupied_time_blocks)
-				if current_block_available==False:
-					current_time += search_resolution
-					continue
-				elif current_block_available==True:
-					block_initial_time = current_block[0]
-					block_final_time = current_block[1]
-					block_price = 0
-					if (inital_search_time <= block_initial_time) and (final_search_time >= block_final_time):
-						court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))		
-					current_time += search_resolution
-
-		elif club.web_scraper == "tcpmatchpoint-free" and result_type == "one_court_per_time_block":
-			current_time = initial_club_time
-			while current_time <= (final_club_time-2*search_resolution):
-				current_block = (current_time.strftime("%H:%M"), (current_time + 2*search_resolution).strftime("%H:%M"))
-				current_block_available = is_current_block_available(current_block, occupied_time_blocks)
-				if current_block_available==False:
-					current_time += search_resolution
-					continue
-				elif current_block_available==True:
-					block_initial_time = current_block[0]
-					block_final_time = current_block[1]
-					block_price = 0
-					if (inital_search_time <= block_initial_time) and (final_search_time >= block_final_time):
-						matching_court = next((court for court in court_list if court.initial_time == block_initial_time), None)
-						if matching_court == None:
-							court_list.append(Court(club.id, date, block_initial_time, block_final_time, court_name, block_price))
-					current_time += search_resolution
-		"""

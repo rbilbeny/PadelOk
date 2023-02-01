@@ -38,7 +38,7 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("one_court_per_time_block", "1671576483233x664693423202648700", "1/2/2023", "11:00", "24:00", 120)
+    response = local_flask_app.handle_request_get_single_scraper("one_court_per_time_block", "1669904088780x898504369661313000", "1/2/2023", "11:00", "24:00", 90)
     
     #LOCAL EQUALS WEB
     print(response)
@@ -72,6 +72,6 @@ def test_club_search_easy():
     print(json.dumps(response.json(), indent=4))
    
 
-#test_club_search()
-test_multi_search1()
+test_club_search()
+#test_multi_search1()
 
