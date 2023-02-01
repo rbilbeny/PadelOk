@@ -36,7 +36,7 @@ def handle_request_get_single_scraper():
     search_date = str(request.args.get('date'))
     inital_time = str(request.args.get('initial_time'))
     final_time = str(request.args.get('final_time'))
-    match_duration = request.args.get('match_duration')
+    match_duration = int(request.args.get('match_duration'))
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
@@ -62,6 +62,7 @@ def handle_request_post_multi_scraper1():
     search_date = request.form.get('date')
     inital_time = request.form.get('initial_time')
     final_time = request.form.get('final_time')
+    match_duration = int(request.form.get('match_duration'))
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
@@ -72,7 +73,7 @@ def handle_request_post_multi_scraper1():
 
     for club_id in clubs_ids_list:
         club = Club(line, club_id)
-        single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time)
+        single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
         single_club_search.scrape()
         for court in single_club_search.result:
             multisearch_result_list.append(court.__dict__)
@@ -90,6 +91,7 @@ def handle_request_post_multi_scraper2():
     search_date = request.form.get('date')
     inital_time = request.form.get('initial_time')
     final_time = request.form.get('final_time')
+    match_duration = int(request.form.get('match_duration'))
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
@@ -97,16 +99,16 @@ def handle_request_post_multi_scraper2():
     #LOCAL EQUALS WEB
     clubs_ids_list = clubs_ids_text.split(", ")
     multisearch_result_list = list()
-    multisearch_result_list = asyncio.get_event_loop().run_until_complete(scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inital_time, final_time))
+    multisearch_result_list = asyncio.get_event_loop().run_until_complete(scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inital_time, final_time, match_duration))
 
     json_courts = json.dumps(multisearch_result_list, indent=4)
     return json_courts
 
-async def scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inital_time, final_time):
+async def scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inital_time, final_time, match_duration):
     multisearch_result_list = list()
     tasks = []
     for club_id in clubs_ids_list:
-        task = asyncio.ensure_future(scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time))
+        task = asyncio.ensure_future(scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time, match_duration))
         tasks.append(task)
     await asyncio.gather(*tasks)
     for task in tasks:
@@ -114,10 +116,10 @@ async def scrape_all_clubs(search_type, line, clubs_ids_list, search_date, inita
             multisearch_result_list.append(court)
     return multisearch_result_list
 
-async def scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time):
+async def scrape_one_club(search_type, line, club_id, search_date, inital_time, final_time, match_duration):
     single_result_list = list()
     club = Club(line, club_id)
-    single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time)
+    single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
     single_club_search.scrape()
     for court in single_club_search.result:
         single_result_list.append(court)

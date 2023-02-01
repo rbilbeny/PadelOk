@@ -66,5 +66,5 @@ def test_multi_search2():
     print("Total courts found: " + str(len(response.json())))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
-test_multi_search2()
+test_club_search()
 
