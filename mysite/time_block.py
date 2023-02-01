@@ -1,6 +1,6 @@
-class Court:
+class TimeBlock:
     """
-    Creates an object that represents the available court to play found during scraping
+    Creates an object that represents the available block of time in which a court is available to play in
     """
 
     def __init__(self, club_id, date, initial_time, final_time, court_name, court_value):

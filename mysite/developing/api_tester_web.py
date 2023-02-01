@@ -23,7 +23,7 @@ def test_post_clubs():
 
 def test_club_search():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    params = {"search_type" : "one_court_per_time_block", "club_id" : "1669903818955x480922479948817660", "date" : "27/1/2023", "initial_time" : "07:00", "final_time" : "23:00"}
+    params = {"search_type" : "one_court_per_time_block", "club_id" : "1669903818955x480922479948817660", "date" : "1/2/2023", "initial_time" : "07:00", "final_time" : "00:00", "match_duration" : 120}
     response = requests.get(URL, params=params)
     
     #LOCAL EQUALS WEB

@@ -36,13 +36,14 @@ def handle_request_get_single_scraper():
     search_date = str(request.args.get('date'))
     inital_time = str(request.args.get('initial_time'))
     final_time = str(request.args.get('final_time'))
+    match_duration = request.args.get('match_duration')
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
 
     #LOCAL EQUALS WEB
     club = Club(line, club_id)
-    single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time)
+    single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
     single_club_search.scrape()
     search_result_list = []
     for court in single_club_search.result:
