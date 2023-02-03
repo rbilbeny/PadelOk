@@ -189,6 +189,22 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 
 
 
+def is_initial_time_already_listed(initial_time, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == initial_time:
+			return True
+	return False
+
+
+
+def is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == block_initial_time and block_in_list.final_time == block_final_time and block_in_list.court_name == court_name:
+			return True
+	return False
+
+
+
 def scraper(result_type, club, date, inital_search_time, final_search_time, match_duration):
 
 	#Defines the response variable, a list of TimeBlock objects
@@ -268,10 +284,14 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 			else:	
 				block_initial_time = current_block[0]
 				block_final_time = current_block[1]
-			if result_type == "one_court_per_time_block" and next((block for block in block_list if block.initial_time == block_initial_time), None) is not None:
+			if result_type == "one_court_per_time_block" and is_initial_time_already_listed(block_initial_time, block_list):
 				current_time += search_resolution
 				continue
-			#print("It's not already in the list")
+			#print("Initial time it's not already in the list")
+			if is_block_already_listed(block_initial_time, block_final_time, block_list):
+				current_time += search_resolution
+				continue
+			#print("Exact same block it's not already in the list")
 			try :
 				block_price = matching_block_price
 			except:
