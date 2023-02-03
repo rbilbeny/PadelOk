@@ -288,7 +288,7 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 				current_time += search_resolution
 				continue
 			#print("Initial time it's not already in the list")
-			if is_block_already_listed(block_initial_time, block_final_time, block_list):
+			if is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
 				current_time += search_resolution
 				continue
 			#print("Exact same block it's not already in the list")
