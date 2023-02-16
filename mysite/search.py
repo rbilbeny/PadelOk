@@ -17,10 +17,14 @@ class ClubSearch:
             self.final_time = final_time
         self.match_duration = match_duration
         self.result = list()
+        self.error = None
 
     def scrape(self):
         if self.club.web_scraper == "tcpmatchpoint-fixed" or self.club.web_scraper == "tcpmatchpoint-free":
-            self.result = tcp_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
+            try: 
+                self.result = tcp_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
+            except:
+                self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."    
 
         else:
             return

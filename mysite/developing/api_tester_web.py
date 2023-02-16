@@ -23,18 +23,18 @@ def test_post_clubs():
 
 def test_club_search():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    params = {"search_type" : "one_court_per_time_block", "club_id" : "1669903818955x480922479948817660", "date" : "1/2/2023", "initial_time" : "07:00", "final_time" : "00:00", "match_duration" : 120}
+    params = {"search_type" : "one_court_per_time_block", "club_id" : "1673490570675x792741118020681700", "date" : "17/2/2023", "initial_time" : "11:00", "final_time" : "00:00", "match_duration" : 190}
     response = requests.get(URL, params=params)
     
     #LOCAL EQUALS WEB
     print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json())))
+    print("Total courts found: " + str(len(json.loads(response)["results"]))) 
 
 def test_multi_search1(): 
-    lista_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
+    lista_text = "1673490570675x792741118020681700, 1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
     URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper1"
-    data = {"search_type" : "all_courts", "clubs_ids" : lista_text, "date" : "1/2/2023", "initial_time" : "17:00", "final_time" : "24:00", "match_duration" : 90}
+    data = {"search_type" : "all_courts", "clubs_ids" : lista_text, "date" : "17/2/2023", "initial_time" : "17:00", "final_time" : "24:00", "match_duration" : 90}
     start_time = time.time()
     response = requests.post(URL, data=data)
     duration = time.time() - start_time
@@ -45,9 +45,8 @@ def test_multi_search1():
     #LOCAL EQUALS WEB
     print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json())))
-    print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")    
-
+    print("Total courts found: " + str(len(json.loads(response)["results"])))
+    print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")     
 
 def test_multi_search2(): 
     lista_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"

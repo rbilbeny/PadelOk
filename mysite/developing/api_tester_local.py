@@ -38,16 +38,16 @@ def test_club_builder():
     print("scraper is " + test_club.web_scraper)   
     
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("one_court_per_time_block", "1669904088780x898504369661313000", "1/2/2023", "11:00", "24:00", 90)
+    response = local_flask_app.handle_request_get_single_scraper("all_courts", "1673490570675x792741118020681700", "17/2/2023", "11:00", "24:00", 90)
     
     #LOCAL EQUALS WEB
     print(response)
-    print("Total courts found: " + str(len(json.loads(response)))) 
+    print("Total courts found: " + str(len(json.loads(response)["results"])))
 
 def test_multi_search1(): 
-    lista_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
+    lista_text = "1673490570675x792741118020681700, 1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
     start_time = time.time()
-    response = local_flask_app.handle_request_post_multi_scraper1("one_court_per_time_block", lista_text, "1/2/2023", "11:00", "24:00", 120)
+    response = local_flask_app.handle_request_post_multi_scraper1("one_court_per_time_block", lista_text, "17/2/2023", "11:00", "24:00", 90)
     duration = time.time() - start_time
     clubs_list = lista_text.split(", ")
     total_clubs = len(clubs_list)
@@ -55,7 +55,7 @@ def test_multi_search1():
     
     #LOCAL EQUALS WEB
     print(response)
-    print("Total courts found: " + str(len(json.loads(response)))) 
+    print("Total courts found: " + str(len(json.loads(response)["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
 def test_club_search_easy():
@@ -72,6 +72,6 @@ def test_club_search_easy():
     print(json.dumps(response.json(), indent=4))
    
 
-test_club_search()
-#test_multi_search1()
+#test_club_search()
+test_multi_search1()
 
