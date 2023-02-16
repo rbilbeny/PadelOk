@@ -29,7 +29,7 @@ def test_club_search():
     #LOCAL EQUALS WEB
     print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(json.loads(response)["results"]))) 
+    print("Total courts found: " + str(len(response.json()["results"]))) 
 
 def test_multi_search1(): 
     lista_text = "1673490570675x792741118020681700, 1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
@@ -45,7 +45,7 @@ def test_multi_search1():
     #LOCAL EQUALS WEB
     print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(json.loads(response)["results"])))
+    print("Total courts found: " + str(len(response.json()["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")     
 
 def test_multi_search2(): 
@@ -65,5 +65,5 @@ def test_multi_search2():
     print("Total courts found: " + str(len(response.json())))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
-test_multi_search2()
+test_club_search()
 
