@@ -242,8 +242,8 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	initial_club_time = datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M")
 	final_club_time = datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")
 
-	#If the club closes at midnight, the final time is set to 23:59 because this scrapper provides that value as "00:00", causing problems with the time comparison.
-	if calendar["d"]["StrHoraFin"] == "00:00":
+	#If the club closes past midnight, the final time is set to the same time the next day.
+	if final_club_time >= datetime.strptime("00:00", "%H:%M"):
 		final_club_time= datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M")+timedelta(days=1)	
 	
 	#Prepares the search time interval to be used in the search. If the search time interval is outside the club's opening hours, it is adjusted to the club's opening hours.

@@ -136,13 +136,13 @@ def price_to_int(price):
 
 
 
-url_base = "https://www.clubconecta.cl"
-url_path_scraper = "/Pages/15-CLUB_CONECTA_LA_DEHESA_PADEL"
+url_base = "https://club7pinos.matchpoint.com.es"
+url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
 API_url = url_base + "/booking/srvc.aspx/ObtenerCuadro"
 
-nmax = 50
+nmax = 20
 n=0
 while n < nmax:	
 
