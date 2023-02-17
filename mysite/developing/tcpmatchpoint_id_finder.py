@@ -136,7 +136,7 @@ def price_to_int(price):
 
 
 
-url_base = "https://club7pinos.matchpoint.com.es"
+url_base = "https://www.bluepadel.cl"
 url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"

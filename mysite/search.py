@@ -20,7 +20,7 @@ class ClubSearch:
         self.error = None
 
     def scrape(self):
-        if self.club.web_scraper == "tcpmatchpoint-fixed" or self.club.web_scraper == "tcpmatchpoint-free":
+        if self.club.web_scraper == "tcpmatchpoint":
             try: 
                 self.result = tcp_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
             except:
