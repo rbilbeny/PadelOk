@@ -31,8 +31,10 @@ def get_session(calendar_url):
 			pass
 
 	html=response.text
-
-	cheat_code=html.split("heatCode='")[1].split("';")[0]
+	try:
+		cheat_code=html.split("heatCode='")[1].split("';")[0]
+	except:
+		cheat_code=0
 
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
 

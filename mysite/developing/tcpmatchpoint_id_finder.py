@@ -32,7 +32,10 @@ def get_session(calendar_url):
 
 	html=response.text
 
-	cheat_code=html.split("heatCode='")[1].split("';")[0]
+	try:
+		cheat_code=html.split("heatCode='")[1].split("';")[0]
+	except:
+		cheat_code=0
 
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
 
@@ -136,7 +139,7 @@ def price_to_int(price):
 
 
 
-url_base = "https://www.bluepadel.cl"
+url_base = "https://padelcerrocalancl.matchpoint.com.es/"
 url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
