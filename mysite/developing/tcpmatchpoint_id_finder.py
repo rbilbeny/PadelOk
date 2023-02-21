@@ -139,7 +139,7 @@ def price_to_int(price):
 
 
 
-url_base = "https://padelcerrocalancl.matchpoint.com.es/"
+url_base = "https://clubcentral.matchpoint.com.es"
 url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
