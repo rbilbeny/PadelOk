@@ -139,6 +139,75 @@ def price_to_int(price):
 
 
 
+def is_current_block_available(current_block_time_interval, occupied_blocks):
+	for occupied_block in occupied_blocks:
+		occupied_block_time_interval = (occupied_block["StrHoraInicio"], occupied_block["StrHoraFin"])
+		if occupied_block_time_interval[1] == "00:00":
+			occupied_block_time_interval = (occupied_block["StrHoraInicio"], "23:59")
+		if not(current_block_time_interval[1] <= occupied_block_time_interval[0] or occupied_block_time_interval[1] <= current_block_time_interval[0]):
+			return False
+		
+	return True
+
+
+
+def is_current_block_overlaping_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if current_block_time_interval[0] < fixed_block_time_interval[0] and fixed_block_time_interval[0] < current_block_time_interval[1]:
+			return True
+		if current_block_time_interval[0] < fixed_block_time_interval[1] and fixed_block_time_interval[1] < current_block_time_interval[1]:
+			return True
+		
+	return False
+
+
+
+def is_current_block_inside_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+			return True
+		
+	return False
+
+
+
+def matching_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+			try:
+				block_price = price_to_int(fixed_block["TextoAdicional"])	
+			except:
+				block_price = 0
+			return (fixed_block_time_interval[0], fixed_block_time_interval[1], block_price)
+	return ("","")
+
+
+
+def is_initial_time_already_listed(initial_time, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == initial_time:
+			return True
+	return False
+
+
+
+def is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == block_initial_time and block_in_list.final_time == block_final_time and block_in_list.court_name == court_name:
+			return True
+	return False
+
+
+
 url_base = "https://clubcentral.matchpoint.com.es"
 url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
@@ -156,7 +225,7 @@ while n < nmax:
 
 	id = n
 	print("id forzado:",str(id))
-	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id,"25/1/2023")
+	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id,"23/2/2023")
 	club_ = calendar["d"]["Nombre"]
 	print("nombre del club:",club_)
 	n = n+1

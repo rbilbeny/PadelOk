@@ -1,5 +1,4 @@
 import requests
-import json
 from datetime import datetime, timedelta
 
 from time_block import TimeBlock
@@ -300,7 +299,9 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 				block_price = 0
 			if block_final_time == "23:59":
 					block_final_time = "00:00"
-			block_list.append(TimeBlock(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+			new_block = TimeBlock(club.id, date, block_initial_time, block_final_time, court_name, block_price)
+			new_block.save_block_duration_text()		
+			block_list.append(new_block)
 						
 			current_time += search_resolution
 

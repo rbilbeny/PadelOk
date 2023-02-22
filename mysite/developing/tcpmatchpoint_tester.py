@@ -1,8 +1,11 @@
 import requests
 import json
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
-
+sys.path.append(str(Path(__file__).parent.parent))
+from time_block import TimeBlock
 
 PROXY_ACTIVE = False
 API_KEY = ""
@@ -138,10 +141,83 @@ def price_to_int(price):
 	return int(price)
 
 
-date = "18/2/2022"
-url_base = "https://clubcentral.matchpoint.com.es"
+
+def is_current_block_available(current_block_time_interval, occupied_blocks):
+	for occupied_block in occupied_blocks:
+		occupied_block_time_interval = (occupied_block["StrHoraInicio"], occupied_block["StrHoraFin"])
+		if occupied_block_time_interval[1] == "00:00":
+			occupied_block_time_interval = (occupied_block["StrHoraInicio"], "23:59")
+		if not(current_block_time_interval[1] <= occupied_block_time_interval[0] or occupied_block_time_interval[1] <= current_block_time_interval[0]):
+			return False
+		
+	return True
+
+
+
+def is_current_block_overlaping_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if current_block_time_interval[0] < fixed_block_time_interval[0] and fixed_block_time_interval[0] < current_block_time_interval[1]:
+			return True
+		if current_block_time_interval[0] < fixed_block_time_interval[1] and fixed_block_time_interval[1] < current_block_time_interval[1]:
+			return True
+		
+	return False
+
+
+
+def is_current_block_inside_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+			return True
+		
+	return False
+
+
+
+def matching_fixed_block(current_block_time_interval, fixed_blocks):
+	for fixed_block in fixed_blocks:
+		fixed_block_time_interval = (fixed_block["StrHoraInicio"], fixed_block["StrHoraFin"])
+		if fixed_block_time_interval[1] == "00:00":
+			fixed_block_time_interval = (fixed_block["StrHoraInicio"], "23:59")
+		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+			try:
+				block_price = price_to_int(fixed_block["TextoAdicional"])	
+			except:
+				block_price = 0
+			return (fixed_block_time_interval[0], fixed_block_time_interval[1], block_price)
+	return ("","")
+
+
+
+def is_initial_time_already_listed(initial_time, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == initial_time:
+			return True
+	return False
+
+
+
+def is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
+	for block_in_list in block_list:
+		if block_in_list.initial_time == block_initial_time and block_in_list.final_time == block_final_time and block_in_list.court_name == court_name:
+			return True
+	return False
+
+
+date = "23/2/2022"
+url_base = "http://padeloriente.cl"
 url_path_scraper = "/Booking/Grid.aspx"
-url_id = 5
+url_id = None
+inital_search_time = "08:00"
+final_search_time = "23:00"
+match_duration = 60
+result_type = "all_courts"
 
 #Defines the response variable, a list of TimeBlock objects
 block_list = list()
@@ -234,7 +310,9 @@ for court in courts:
             block_price = 0
         if block_final_time == "23:59":
                 block_final_time = "00:00"
-        block_list.append(TimeBlock(club.id, date, block_initial_time, block_final_time, court_name, block_price))
+        new_block = TimeBlock("id_club_text", date, block_initial_time, block_final_time, court_name, block_price)
+        new_block.save_block_duration_text()		
+        block_list.append(new_block)
                     
         current_time += search_resolution
 
