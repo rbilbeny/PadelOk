@@ -35,7 +35,11 @@ def get_session(calendar_url):
 	try:
 		cheat_code=html.split("heatCode='")[1].split("';")[0]
 	except:
-		cheat_code=0
+		try:
+			cheat_code=html.split("pKey='")[1].split("';")[0]
+		except:
+			cheat_code=""	
+
 
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
 
@@ -64,6 +68,7 @@ def get_id(id_url,session_id,cheat_code):
 
 	json_data = {
 		'p': cheat_code,
+		'key': cheat_code
 	}
 
 	while True:
@@ -114,6 +119,7 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 		'idCuadro': id,
 		'fecha': date,
 		'p': cheat_code,
+		'key': cheat_code
 	}
 
 	if PROXY_ACTIVE:
@@ -208,20 +214,19 @@ def is_block_already_listed(block_initial_time, block_final_time, court_name, bl
 
 
 
-url_base = "https://clubcentral.matchpoint.com.es"
-url_path_scraper = "/Booking/Grid.aspx"
+url_base = "https://www.tenissantuario.cl"
+url_path_scraper = "/Booking/Grid.aspx?id=6"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
 API_url = url_base + "/booking/srvc.aspx/ObtenerCuadro"
 
-nmax = 20
+nmax = 8
 n=0
 while n < nmax:	
 
 	print("URL:",calendar_url)
 	
 	session_id,cheat_code = get_session(calendar_url)
-
 
 	id = n
 	print("id forzado:",str(id))

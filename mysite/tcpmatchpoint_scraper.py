@@ -1,4 +1,5 @@
 import requests
+import json
 from datetime import datetime, timedelta
 
 from time_block import TimeBlock
@@ -33,7 +34,10 @@ def get_session(calendar_url):
 	try:
 		cheat_code=html.split("heatCode='")[1].split("';")[0]
 	except:
-		cheat_code=0
+		try:
+			cheat_code=html.split("pKey='")[1].split("';")[0]
+		except:
+			cheat_code=""	
 
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
 
@@ -62,6 +66,7 @@ def get_id(id_url,session_id,cheat_code):
 
 	json_data = {
 		'p': cheat_code,
+		'key': cheat_code
 	}
 
 	while True:
@@ -112,6 +117,7 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 		'idCuadro': id,
 		'fecha': date,
 		'p': cheat_code,
+		'key': cheat_code
 	}
 
 	if PROXY_ACTIVE:
@@ -233,8 +239,8 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	#Third scrapping step, gets the calendar of the club for the specified date, which contains all the information needed to evaluate availability.
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
 	#print(calendar)
-	#calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
-	#print(calendar_)
+	calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
+	print(calendar_)
 
 	# Extracts some basic information for the club as a whole. Availabilty is evaluated at the court level.
 	club_ = calendar["d"]["Nombre"]
