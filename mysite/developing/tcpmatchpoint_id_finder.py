@@ -38,9 +38,18 @@ def get_session(calendar_url):
 		try:
 			cheat_code=html.split("pKey='")[1].split("';")[0]
 		except:
-			cheat_code=""	
+			try:
+				login_data = {
+    				'email': 'rodrigobilbeny@gmail.com',
+    				'password': 'yzy1QUY-nrv.khp!jbz'
+				}
+				session = requests.Session()
+				response = session.post('https://clubpadelpieandino.matchpoint.com.es/Login.aspx', data=login_data)
+				cheat_code="got login session"
+			except:
+				cheat_code=""	
 
-
+	print("Cheat code: " + cheat_code)
 	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
 
 	return session_id,cheat_code
@@ -214,13 +223,13 @@ def is_block_already_listed(block_initial_time, block_final_time, court_name, bl
 
 
 
-url_base = "https://www.tenissantuario.cl"
-url_path_scraper = "/Booking/Grid.aspx?id=6"
+url_base = "https://clubpadelpieandino.matchpoint.com.es"
+url_path_scraper = "/Booking/Grid.aspx?id=4"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
 API_url = url_base + "/booking/srvc.aspx/ObtenerCuadro"
 
-nmax = 8
+nmax = 25
 n=0
 while n < nmax:	
 

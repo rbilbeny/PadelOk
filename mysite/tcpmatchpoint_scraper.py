@@ -6,6 +6,27 @@ from time_block import TimeBlock
 
 PROXY_ACTIVE = False
 API_KEY = ""
+login_data = {
+    				'email': 'rodrigobilbeny@gmail.com',
+    				'password': 'yzy1QUY-nrv.khp!jbz'
+				}
+
+def login(base_url):
+	session = requests.Session()
+	while True:
+		try:
+			url = base_url + "/Login.aspx"	
+			response = session.post(url, data=login_data)
+			if response.status_code==200:
+				break
+		except:
+			pass
+	
+	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
+	
+	return session_id
+
+
 
 def get_session(calendar_url):
 
@@ -39,7 +60,10 @@ def get_session(calendar_url):
 		except:
 			cheat_code=""	
 
-	session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
+	try:
+		session_id=response.cookies.get_dict()["ASP.NET_SessionId"]
+	except: 
+		session_id=""	
 
 	return session_id,cheat_code
 
@@ -224,7 +248,11 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	API_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadro"
 
 	#Fisrt scrapping step, gets the session id and the cheat code
-	session_id,cheat_code = get_session(calendar_url)
+	if club.id == "1677159808890x906999172264078800": #This is the only club that requires a login, we will keep it this way until we find a better solution
+		session_id = login(club.url_base)
+		cheat_code = "eNEe29kXfZByQCnYpO1N2CNLhOvbqVUuJiGKU/HyckTglvloaKL4JA==" #Can't find out how to get this one, i've got it from the frontend
+	else:	
+		session_id,cheat_code = get_session(calendar_url)
 
 	#Second scrapping step, gets the id of the club. Sometimes the URL holds multiple clubs and in those cases this method doesn't work.
 	#For each of those cases, the id is forced to be the one specified in the club object, obtained previously through trial and error, manually. 
@@ -239,8 +267,8 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	#Third scrapping step, gets the calendar of the club for the specified date, which contains all the information needed to evaluate availability.
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date)
 	#print(calendar)
-	calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
-	print(calendar_)
+	#calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
+	#print(calendar_)
 
 	# Extracts some basic information for the club as a whole. Availabilty is evaluated at the court level.
 	club_ = calendar["d"]["Nombre"]
