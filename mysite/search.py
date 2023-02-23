@@ -1,4 +1,5 @@
 from tcpmatchpoint_scraper import scraper as tcp_scraper
+from easycancha_scraper import scraper as easy_scraper
 
 class ClubSearch:
     """
@@ -24,7 +25,13 @@ class ClubSearch:
             try: 
                 self.result = tcp_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
             except:
-                self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."    
+                self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."
+
+        elif self.club.web_scraper == "easycancha":
+            try: 
+                self.result = easy_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
+            except:
+                self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."            
 
         else:
             return
