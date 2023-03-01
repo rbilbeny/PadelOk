@@ -3,11 +3,12 @@ from flask import request
 import asyncio
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent))
-from search import ClubSearch
-from club import Club
+from search import ClubSearch, ClubSearch2
+from club import Club, Club2
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
@@ -45,6 +46,31 @@ def handle_request_get_single_scraper():
     club = Club(line, club_id)
     single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
     single_club_search.scrape()   
+    search_result_list = []
+    search_error_list = []
+    for block in single_club_search.result:
+        search_result_list.append(block.__dict__)
+    if single_club_search.error != None:
+        search_error_list.append({"error_message": single_club_search.error})
+    json_courts = {"results": search_result_list, "errors": search_error_list}
+    response = json.dumps(json_courts, indent=4)
+    return response
+
+
+
+
+@app.route('/get_single_scraper2', methods=['GET'])
+def handle_request_get_single_scraper():
+    club_id  = str(request.args.get('club_id'))
+    search_date = str(request.args.get('date'))
+    initial_time = str(request.args.get('initial_time'))
+    final_time = str(request.args.get('final_time'))
+
+    search_date = datetime.strptime(search_date, "%Y-%m-%d")
+
+    club = Club2(club_id)
+    single_club_search = ClubSearch2(club, search_date)
+    single_club_search.scrape(initial_time, final_time)   
     search_result_list = []
     search_error_list = []
     for block in single_club_search.result:

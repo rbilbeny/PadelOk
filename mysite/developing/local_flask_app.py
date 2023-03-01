@@ -1,10 +1,11 @@
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from search import ClubSearch
-from club import Club
+from search import ClubSearch, ClubSearch2
+from club import Club, Club2
 
 
 def handle_request_post_clubs(input_text):
@@ -40,6 +41,29 @@ def handle_request_get_single_scraper(search_type, club_id, date, inital_time, f
     json_courts = {"results": search_result_list, "errors": search_error_list}
     response = json.dumps(json_courts, indent=4)
     return response
+
+
+
+def handle_request_get_single_scraper2(club_id, date, initial_search_time_str, final_search_time_str): 
+
+    date = datetime.strptime(date, "%Y-%m-%d")
+    club = Club2(club_id)
+    single_club_search = ClubSearch2(club, date)
+    single_club_search.scrape(initial_search_time_str, final_search_time_str)   
+
+    search_result_list = []
+    search_error_list = []
+
+    for block in single_club_search.result:
+        search_result_list.append(block.__dict__)
+
+    if single_club_search.error != None:
+        search_error_list.append({"error_message": single_club_search.error})
+
+    json_courts = {"results": search_result_list, "errors": search_error_list}
+    response = json.dumps(json_courts, indent=4)
+    return response
+
 
 
 def handle_request_post_multi_scraper1(search_type, clubs_ids, date, inital_time, final_time, match_duration): 

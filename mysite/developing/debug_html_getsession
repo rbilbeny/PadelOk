@@ -1,0 +1,694 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head id="ctl00_Head1"><title>
+	Portal - Reservas - Horario Reservas
+</title><meta name="distribution" content="Global" /><meta name="category" content="Reservas y Servicios" /><meta name="language" content="es-CL" /><meta name="author" content="TPC-SOFT" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="resource-type" content="document" /><meta name="robots" content="all" /><meta name="revisit-after" content="10" /><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3" />
+
+
+    <script src="https://code.jquery.com/jquery-1.7.2.min.js" type="text/javascript"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" /><link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet" /><link id="ctl00_rf6" href="../PadelEstoril/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /><link id="ctl00_rf1" href="../PadelEstoril/css/globalPadelEstoril.css" rel="stylesheet" type="text/css" /><link id="ctl00_Link2" href="../css/userPreferences.css" rel="stylesheet" type="text/css" /><link id="ctl00_rf16" rel="stylesheet" type="text/css" href="../Scripts/fancybox/jquery.fancybox.css" media="screen" />
+
+
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('#slider').nivoSlider();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+        $(window).on("scroll", function() {
+            if($(window).scrollTop() > 50) {
+                $(".header_top2").addClass("header_top_fixed");
+            } else {
+                //remove the background property so it comes transparent again (defined in your css)
+                $(".header_top2").removeClass("header_top_fixed");
+            }
+        });
+        });
+    </script>
+
+
+   <script>
+        var SCROLL_ACTUAL = 0;
+        $(window).ready(function(){
+	        $(window).scroll(function (event) {
+		        var scroll = $(window).scrollTop();
+		        var parallax_position_y = $(".background-parallax").css("background-position-y");
+		        parallax_position_y = parseInt(parallax_position_y.replace("%", ""));
+
+		        if(scroll > SCROLL_ACTUAL && parallax_position_y < 100){
+			        parallax_position_y += 2;
+			        $(".background-parallax").css("background-position-y", parallax_position_y + "%");
+		        }
+		        if(scroll < SCROLL_ACTUAL && parallax_position_y > 0){
+			        parallax_position_y -= 2;
+			        $(".background-parallax").css("background-position-y", parallax_position_y + "%");
+		        }
+		        SCROLL_ACTUAL = scroll;
+	        });
+        });
+    </script>
+
+
+
+    <meta name="viewport" content="initial-scale=1.0 ,  minimum-scale=0.1" />
+    <link rel="stylesheet" type="text/css" href="../Scripts/jquery.svg/jquery.svg.css" />
+    <link rel="stylesheet" type="text/css" href="../scripts/generatabla/estilosSvg.css" />
+    <link rel="stylesheet" type="text/css" href="animate.css" />
+    <link rel="stylesheet" href="../scripts/jquery.ui/jquery-ui.css" />
+</head>
+
+<body class="background-parallax">
+<form name="aspnetForm" method="post" action="Grid.aspx" id="aspnetForm">
+<div>
+<input type="hidden" name="ctl00_ScriptManager1_HiddenField" id="ctl00_ScriptManager1_HiddenField" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJLTI5NjIzMjU0D2QWAmYPZBYCAgMPZBYMAiEPZBYCAgEPFgIeBFRleHQFlQU8dWwgY2xhc3M9J21lbnVob3Jpeicgc3R5bGU9J21hcmdpbi1ib3R0b206MHB4OyBwYWRkaW5nLWJvdHRvbTowcHgnPjxsaSBkYXRhLWxldmVsPScwJz48YSBocmVmPScvSW5kZXguYXNweCcgdGFyZ2V0PSdfc2VsZic+PHNwYW4+SW5pY2lvPC9zcGFuPjwvYT48L2xpPjxsaSBkYXRhLWxldmVsPScwJz48YSBocmVmPScvQm9va2luZy9HcmlkLmFzcHgnIHRhcmdldD0nX3NlbGYnPjxzcGFuPlJlc2VydmFzPC9zcGFuPjwvYT48L2xpPjxsaSBkYXRhLWxldmVsPScwJz48YSBocmVmPScvTm90aWNpYXNCbG9xdWVzLmFzcHgnIHRhcmdldD0nX3NlbGYnPjxzcGFuPk5vdGljaWFzPC9zcGFuPjwvYT48L2xpPjxsaSBkYXRhLWxldmVsPScwJz48YSBocmVmPScvUGFnZXMvOS1FTF9DTFVCX1BBREVMX0VTVE9SSUwnIHRhcmdldD0nX3NlbGYnPjxzcGFuPkVsIGNsdWI8L3NwYW4+PC9hPjwvbGk+PGxpIGRhdGEtbGV2ZWw9JzAnPjxhIGhyZWY9Jy9QYWdlcy8xMC1QUkVDSU9TX1BBREVMX0VTVE9SSUwnIHRhcmdldD0nX3NlbGYnPjxzcGFuPlByZWNpb3M8L3NwYW4+PC9hPjwvbGk+PGxpIGRhdGEtbGV2ZWw9JzAnPjxhIGhyZWY9Jy9QYWdlcy84LUNPTlRBQ1RPX1BBREVMX0VTVE9SSUwnIHRhcmdldD0nX3NlbGYnPjxzcGFuPkNvbnRhY3RvPC9zcGFuPjwvYT48L2xpPjwvdWw+ZAIjD2QWAgIBD2QWAgIDDxYCHwAFrQM8dWw+PGxpPjxhIGhyZWY9Jy9JbmRleC5hc3B4JyB0YXJnZXQ9J19zZWxmJz5JbmljaW88L2E+PC9saT48bGk+PGEgaHJlZj0nL0Jvb2tpbmcvR3JpZC5hc3B4JyB0YXJnZXQ9J19zZWxmJz5SZXNlcnZhczwvYT48L2xpPjxsaT48YSBocmVmPScvTm90aWNpYXNCbG9xdWVzLmFzcHgnIHRhcmdldD0nX3NlbGYnPk5vdGljaWFzPC9hPjwvbGk+PGxpPjxhIGhyZWY9Jy9QYWdlcy85LUVMX0NMVUJfUEFERUxfRVNUT1JJTCcgdGFyZ2V0PSdfc2VsZic+RWwgY2x1YjwvYT48L2xpPjxsaT48YSBocmVmPScvUGFnZXMvMTAtUFJFQ0lPU19QQURFTF9FU1RPUklMJyB0YXJnZXQ9J19zZWxmJz5QcmVjaW9zPC9hPjwvbGk+PGxpPjxhIGhyZWY9Jy9QYWdlcy84LUNPTlRBQ1RPX1BBREVMX0VTVE9SSUwnIHRhcmdldD0nX3NlbGYnPkNvbnRhY3RvPC9hPjwvbGk+PC91bD5kAiUPZBYCAgwPFgIeB1Zpc2libGVoZAInDxYCHwFoFgICAQ8WAh8AZWQCLQ8WAh4JaW5uZXJodG1sBZECDQogICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBzdHlsZT0iZm9udC13ZWlnaHQ6Ym9sZCI+wqkgUGFkZWwgRXN0b3JpbDwvc3Bhbj48YnIgLz5BdiBMYXMgQ29uZGVzIDEwNDgwLCBWaXRhY3VyYS4gPGJyLz4gIDxici8+VGVsLiArNTY5IDg4MjM3Nzc2PGJyIC8+PGEgaHJlZj0ibWFpbHRvOnBhZGVsZXN0b3JpbEBnbWFpbC5jb20iIGNsYXNzPSJMaW5rUGllIiB0YXJnZXQ9Il9ibGFuayI+cGFkZWxlc3RvcmlsQGdtYWlsLmNvbTwvYT4NCiAgICAgICAgICAgICAgICAgICAgZAIvD2QWCAIDDw8WAh4LTmF2aWdhdGVVcmwFV2h0dHBzOi8vcGFkZWxlc3RvcmlsY2wubWF0Y2hwb2ludC5jb20uZXMvZmlsZXMuYXNoeD9pZD1lYjZlM2JiYTEwYmVkMDc5ZDQ2ODcyNDI4OTE4ZDNlNWRkAgUPDxYCHwFoZGQCBw8PFgIfAWhkZAIJDw8WAh8DBVdodHRwczovL3BhZGVsZXN0b3JpbGNsLm1hdGNocG9pbnQuY29tLmVzL2ZpbGVzLmFzaHg/aWQ9NWFlMjc3YWJiMWU2OTdlMTNlMGZhMDA4MjE5MmFjNmJkZGR0sxw/ekbhMUcFB+OjbNEFFwKVig==" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=w2hu9YuLFWsxdN9csoDMpMiNYDJzorTmOCImQaYOlNDl_jg56Xsv2R_5n8bBgDl3jxWYu908PKX9Nmdanwuxju2GCLE1&amp;t=637538220210013023" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+cheatCode='eNEe29kXfZByQCnYpO1N2CNLhOvbqVUuQ5DGJP9EVOXglvloaKL4JA==';var __cultureInfo = '{"name":"es-ES","numberFormat":{"CurrencyDecimalDigits":2,"CurrencyDecimalSeparator":",","IsReadOnly":true,"CurrencyGroupSizes":[3],"NumberGroupSizes":[3],"PercentGroupSizes":[3],"CurrencyGroupSeparator":".","CurrencySymbol":"€","NaNSymbol":"NeuN","CurrencyNegativePattern":8,"NumberNegativePattern":1,"PercentPositivePattern":0,"PercentNegativePattern":0,"NegativeInfinitySymbol":"-Infinito","NegativeSign":"-","NumberDecimalDigits":2,"NumberDecimalSeparator":",","NumberGroupSeparator":".","CurrencyPositivePattern":3,"PositiveInfinitySymbol":"Infinito","PositiveSign":"+","PercentDecimalDigits":2,"PercentDecimalSeparator":",","PercentGroupSeparator":".","PercentSymbol":"%","PerMilleSymbol":"‰","NativeDigits":["0","1","2","3","4","5","6","7","8","9"],"DigitSubstitution":1},"dateTimeFormat":{"AMDesignator":"","Calendar":{"MinSupportedDateTime":"\/Date(-62135596800000)\/","MaxSupportedDateTime":"\/Date(253402297199999)\/","AlgorithmType":1,"CalendarType":1,"Eras":[1],"TwoDigitYearMax":2029,"IsReadOnly":true},"DateSeparator":"/","FirstDayOfWeek":1,"CalendarWeekRule":0,"FullDateTimePattern":"dddd, dd\u0027 de \u0027MMMM\u0027 de \u0027yyyy H:mm:ss","LongDatePattern":"dddd, dd\u0027 de \u0027MMMM\u0027 de \u0027yyyy","LongTimePattern":"H:mm:ss","MonthDayPattern":"dd MMMM","PMDesignator":"","RFC1123Pattern":"ddd, dd MMM yyyy HH\u0027:\u0027mm\u0027:\u0027ss \u0027GMT\u0027","ShortDatePattern":"dd/MM/yyyy","ShortTimePattern":"H:mm","SortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","TimeSeparator":":","UniversalSortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","YearMonthPattern":"MMMM\u0027 de \u0027yyyy","AbbreviatedDayNames":["dom","lun","mar","mié","jue","vie","sáb"],"ShortestDayNames":["do","lu","ma","mi","ju","vi","sá"],"DayNames":["domingo","lunes","martes","miércoles","jueves","viernes","sábado"],"AbbreviatedMonthNames":["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic",""],"MonthNames":["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre",""],"IsReadOnly":true,"NativeCalendarName":"calendario gregoriano","AbbreviatedMonthGenitiveNames":["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic",""],"MonthGenitiveNames":["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre",""]}}';//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=A3WZBSl0n3rUsRLHNVqkZV9g_XrZUkmNOKOxtA7Pon8z8JSETufChGW5gHINlLlYpbjnIohdrCoN78FIshwSI9QhLusrrSleCSeELU_8Kkoco8Mi0&amp;t=ffffffffe3663des.js" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=nrFzbWG1OTyDkalxhNoAukkYBW-sp8fKR_Pq2mYxJC8wxNOdbYM0lsMUfZ9eyMc3tCzbS0-9XuLgMNLqzdzBecF8BuAZZkGjWHcvx2Yov0tAHvdea0Qh_l9IXNaHRvkNetljFw2&amp;t=ffffffffe3663des.js" type="text/javascript"></script>
+<script src="../Scripts/SliderSinTextos/jquery.nivo.slider.js" type="text/javascript"></script>
+<script src="../Scripts/jquery.fancybox.js?v=2.1.5" type="text/javascript"></script>
+<script src="../Scripts/SliderConTextos/jquery.easing.1.3.js" type="text/javascript"></script>
+<script src="../Scripts/SliderConTextos/jquery.animate-enhanced.min.js" type="text/javascript"></script>
+<script src="../Scripts/SliderConTextos/jquery.superslides.js" type="text/javascript"></script>
+<script src="../Scripts/CookiesUserPreferences/CookiesUserPreferences.js" type="text/javascript"></script>
+<script src="../Scripts/Menu/menu.js" type="text/javascript"></script>
+<script src="../Scripts/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="../PadelEstoril/js/jquery.flexisel.js" type="text/javascript"></script>
+<script src="https://unpkg.com/sweetalert2@7.17.0/dist/sweetalert2.all.js" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B76B60B4" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWCQKbk8hKAqCAvs8HAqGqp/APArjYhIMDApz87jsCo7Wc/AMCr9anyAEC45Ga6AQCxJjEpAfyQ8aaPSJ50m+CwFm+m2AYRI910A==" />
+</div>
+
+    <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', document.getElementById('aspnetForm'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls([], ['ctl00$ScriptManager1'], [], 100000);
+//]]>
+</script>
+<input type="hidden" name="ctl00$ScriptManager1" id="ctl00_ScriptManager1" /><iframe id="__historyFrame" src="/ScriptResource.axd?d=0hSNQ5CrhJoH2E_Lowa_PsolJPNv63F3J9_sntbIQidzwe6tJjGvWI-D-4g1mXBNJUmLK2i9UA5O0gasISzYe4BnrX7JG6XlAnOXMGd5NRK4-xrj0" style="display:none;">
+
+</iframe>
+
+    <div class="containerIdioma" style="display:none">
+                              <div class="dropdown">
+                                <span class="selLabel">
+                                <img id="ctl00_Image1" title="LANGUAGE" src="../PadelEstoril/img/icon-world.svg" alt="LANGUAGE" style="border-width:0px;width: 23px;vertical-align: middle;margin-right:5px" />&nbsp;</span>
+                                <input type="hidden" name="cd-dropdown">
+                                <ul class="dropdown-list">
+                                  <li data-value="2" >
+                                    <span><a id="ctl00_HyperLinkCastellano" AlternateText="Versión en Español" title="Versión en Español" href="../lang.aspx?iso=es-ES">ES<img id="ctl00_Image3" title="Español" src="../PadelEstoril/img/espanya.png" alt="Español" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="3">
+                                    <span><a id="ctl00_HyperLinkCatalan" AlternateText="Versió en català" title="Versió en català" href="../lang.aspx?iso=ca-ES">CA<img id="ctl00_Image4" title="Català" src="../PadelEstoril/img/catalunya.png" alt="Català" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="1" style="display:none">
+                                    <span><a id="ctl00_HyperLinkIngles" AlternateText="English version" title="English version" href="../lang.aspx?iso=en-GB">EN<img id="ctl00_Image2" title="English" src="../PadelEstoril/img/reino-unido.png" alt="English" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="4" style="display:none">
+                                    <span><a id="ctl00_HyperLinkItaliano" AlternateText="Versione italiana" title="Versione italiana" href="../lang.aspx?iso=it-IT">IT<img id="ctl00_Image5" title="Italiano" src="../PadelEstoril/img/italia.png" alt="Italiano" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="5" style="display:none">
+                                    <span><a id="ctl00_HyperLinkFrances" AlternateText="Version Française" title="Version Française" href="../lang.aspx?iso=fr-FR">FR<img id="ctl00_Image6" title="Français" src="../PadelEstoril/img/francia.png" alt="Français" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="6" style="display:none">
+                                    <span><a id="ctl00_HyperLinkHolandes" AlternateText="Nederland Versie" title="Nederland Versie" href="../lang.aspx?iso=nl-NL">NL<img id="ctl00_Image7" title="Nederlands" src="../PadelEstoril/img/holland.png" alt="Nederlands" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="7" style="display:none">
+                                    <span><a id="ctl00_HyperLinkAleman" AlternateText="Deutschland Version" title="Deutschland Version" href="../lang.aspx?iso=de-DE">DE<img id="ctl00_Image8" title="Deutsche" src="../PadelEstoril/img/germany.png" alt="Deutsche" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="8" style="display:none">
+                                    <span><a id="ctl00_HyperLinkPortugues" AlternateText="Versão em português" title="Versão em português" href="../lang.aspx?iso=pt-PT">PT<img id="ctl00_Image9" title="Português" src="../PadelEstoril/img/portugal.png" alt="Português" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                  <li data-value="9" style="display:none">
+                                    <span><a id="ctl00_HyperLinkBrasil" AlternateText="Versão em português (Brasil)" title="Versão em português (Brasil)" href="../lang.aspx?iso=pt-BR">PT<img id="ctl00_Image10" title="Português (Brasil)" src="../PadelEstoril/img/brasil.png" alt="Português (Brasil)" style="border-width:0px;width: 20px;vertical-align: middle;margin-right:5px; float: left;margin-top: 10px" /></a></span>
+                                  </li>
+                                </ul>
+                              </div>
+   </div>
+
+
+
+    <header class="header">
+        <div class="header_top2">
+            <div class="wrap_cabecera">
+                    <div class="logo" >
+                        <a href="../index.aspx"><img id="ctl00_ImageLogoVersusCenter" title="Padel Estoril" src="../PadelEstoril/img/logo.png" alt="Padel Estoril" style="border-width:0px;width:auto; max-width:190px" /></a>
+                    </div>
+
+                    <div class="contenedorUsuarios">
+                         <div class="contenedorBanderas">
+                            <a id="ctl00_HyperLinkRegistro" class="BotonRegistro" href="../Registro.aspx">REGÍSTRATE</a>
+
+
+
+
+
+                            <a href="../Login.aspx" id="ctl00_linkUsuario" class="BotonAccesoUsuario" title="ACCESO USUARIO">
+
+                            <span id="ctl00_LabelAccesoUsuario">ACCESO USUARIO</span></a>
+
+                         </div>
+
+                    </div>
+                    <div class="contenedorEstiloMenu">
+                        <div class="contenedorEstiloMenuInterior">
+
+
+<div class="menuhoriz">
+    <ul class='menuhoriz' style='margin-bottom:0px; padding-bottom:0px'><li data-level='0'><a href='/Index.aspx' target='_self'><span>Inicio</span></a></li><li data-level='0'><a href='/Booking/Grid.aspx' target='_self'><span>Reservas</span></a></li><li data-level='0'><a href='/NoticiasBloques.aspx' target='_self'><span>Noticias</span></a></li><li data-level='0'><a href='/Pages/9-EL_CLUB_PADEL_ESTORIL' target='_self'><span>El club</span></a></li><li data-level='0'><a href='/Pages/10-PRECIOS_PADEL_ESTORIL' target='_self'><span>Precios</span></a></li><li data-level='0'><a href='/Pages/8-CONTACTO_PADEL_ESTORIL' target='_self'><span>Contacto</span></a></li></ul>
+</div>
+
+<script type="text/javascript">
+
+    try {
+
+        $(function () {
+            $('a.imagenswap').hover(function (evt) {
+                var imagenBackground = $(this).data('url-imagen');
+                var span = $(this).find("span");
+                $(this).css({
+                    'background-image': 'url(' + imagenBackground + ')',
+                    'background-position': "center",
+                    'background-repeat': "no-repeat",
+                    'background-size' : 'center'
+                                });
+
+                span.css("opacity", 0);
+            },
+            function (evt) {
+                var span = $(this).find("span");
+                $(this).css({
+                    'background-image': '',
+                    'background-position': '',
+                    'background-repeat': '',
+                    'background-size': ''
+                });
+                span.css("opacity", 1);
+            });
+        });
+
+
+
+    } catch (ex) { }
+
+    $(document).ready()
+    {
+        $('.contenedorEstiloMenu img').each(function (index) {
+            if ($(this).hasClass("imgMenu")) {
+                $(this).css('height', 43);
+                $(this).css('margin-top', -10);
+                $(this).css('margin-bottom', -10);
+            }
+        });
+        $('.contenedorEstiloMenuMasterPage img').each(function (index) {
+            if ($(this).hasClass("imgMenu")) {
+                $(this).css('height', 43);
+                $(this).css('margin-top', -10);
+                $(this).css('margin-bottom', -10);
+            }
+        });
+    }
+
+
+
+</script>
+
+
+<!-- Estilo para el SubMenu (Mover a hojas despues) -->
+
+<script type="text/javascript">
+    $(function () {
+        var pull = $('#pull');
+        var menu = pull.closest('nav').find('ul');// $('nav ul');
+        var menuHeight = menu.height();
+
+        var pull2 = $('#pullIntranet');
+        var menu2 = pull2.closest('nav').find('ul'); // $('nav ul');
+        var menuHeight2 = menu2.height();
+
+        var pull3 = $('#pullSuperior');
+        var menu3 = pull3.closest('nav').find('ul'); // $('nav ul');
+        var menuHeight3 = menu3.height();
+
+        $(pull).on('click', function (e) {
+            e.preventDefault();
+            menu.slideToggle();
+        });
+
+        $(pull2).on('click', function (e) {
+            e.preventDefault();
+            menu2.slideToggle();
+        });
+
+        $(pull3).on('click', function (e) {
+            e.preventDefault();
+            menu3.slideToggle();
+        });
+
+        $(window).resize(function () {
+            var w = $(window).width();
+            if (w > 320 && menu.is(':hidden')) {
+                menu.removeAttr('style');
+                menu2.removeAttr('style');
+                menu3.removeAttr('style');
+            }
+        });
+    });
+</script>
+
+<div id="ctl00_WUCMenuSuperiorResponsive1_PanelGeneral">
+
+    <a class="toggleMenu" href="#"><span id="ctl00_WUCMenuSuperiorResponsive1_Label1">MENÚ PRINCIPAL</span></a>
+    <nav class="clearfix">
+        <ul><li><a href='/Index.aspx' target='_self'>Inicio</a></li><li><a href='/Booking/Grid.aspx' target='_self'>Reservas</a></li><li><a href='/NoticiasBloques.aspx' target='_self'>Noticias</a></li><li><a href='/Pages/9-EL_CLUB_PADEL_ESTORIL' target='_self'>El club</a></li><li><a href='/Pages/10-PRECIOS_PADEL_ESTORIL' target='_self'>Precios</a></li><li><a href='/Pages/8-CONTACTO_PADEL_ESTORIL' target='_self'>Contacto</a></li></ul>
+        <a href="#" id="pull"><span id="ctl00_WUCMenuSuperiorResponsive1_LabelTituloMenuGeneral">MENÚ PRINCIPAL</span></a>
+    </nav>
+
+</div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <div class="contenedorGeneralTodo2">
+
+     <div class="main">
+      <div class="wrap">
+
+		    <!-- CONTENIDO -->
+
+           <div class="services_gridInterior">
+		      <div class="content_bottom">
+
+    <script type="text/javascript">
+
+        function hayTerminosContratacion() {
+
+            var rutaFichero = "https://padelestorilcl.matchpoint.com.es/files.ashx?id=5ae277abb1e697e13e0fa0082192ac6b";
+            if (rutaFichero.length > 0)
+                return true;
+            else
+                return false;
+        }
+
+        function terminosContratacion() {
+            var rutaFichero = "https://padelestorilcl.matchpoint.com.es/files.ashx?id=5ae277abb1e697e13e0fa0082192ac6b";
+
+            try {
+                if (rutaFichero.length > 0) {
+                    $('<iframe id="idContratacion" style="width: 100%!important;height: 100%!important;">').dialog({
+                        dialogClass: "infoNormativa"
+                    })
+                    .attr('src', rutaFichero);
+                    styles();
+                }
+
+                $("#idContratacion")[0].style.height = "100%";
+                $("#idContratacion")[0].style.width = "100%";
+
+            } catch (e) {
+            }
+        }
+    </script>
+    <div class="contenedorContenido" style="width: 100%">
+        <div class="contenedorContenidoCentralDerecho">
+            <input type="hidden" name="ctl00$ContentPlaceHolderContenido$WUCCargadorSeccionesAntesDelCuadro$HiddenFieldIdPagina" id="ctl00_ContentPlaceHolderContenido_WUCCargadorSeccionesAntesDelCuadro_HiddenFieldIdPagina" />
+<input type="hidden" name="ctl00$ContentPlaceHolderContenido$WUCCargadorSeccionesAntesDelCuadro$HiddenFieldSeccionesACargar" id="ctl00_ContentPlaceHolderContenido_WUCCargadorSeccionesAntesDelCuadro_HiddenFieldSeccionesACargar" />
+
+
+
+            <div id="tablaReserva">
+                <div id="ctl00_ContentPlaceHolderContenido_divTitulo" class="contenedorTitulo">
+                    <h1>
+                        Reservas
+                    </h1>
+                </div>
+
+                <div class="Detalle">
+
+                    <div id="Contenido_HTML" style="margin-bottom:20px">
+                    </div>
+                    <div class="tablaReserva2">
+                    <div class="filtro" style="display: block; overflow: hidden;">
+                        <div style="display: block; overflow: hidden; float: left; margin-top: 8px; margin-bottom: 3px">
+                            <div class="fechaTxt">
+                                <span style="font-size: 15px">
+                                    Fecha:</span>
+                            </div>
+                            <div class="fechaInput">
+                                <input type="text" id="fechaTabla" class="fechaTabla TextBoxFecha" readonly />
+                            </div>
+                        </div>
+                        <div style="display: block; overflow: hidden; float: left; margin-top: 8px; margin-bottom: 3px">
+                            <div class="calendarioTxt">
+                                <span style="font-size: 15px">
+                                    Calendario:</span>
+                            </div>
+                            <div class="calendarioInput">
+                                <select name="calendarios" id="calendarios" class="calendarios">
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: block; overflow: hidden; float: left; margin-top: 8px; margin-bottom: 3px; margin-left: 5px">
+                            <input type="button" class="boton hoy" style="padding: 10px !important" value='Hoy' />
+                            <input type="button" class="boton ayer" style="padding: 10px !important" value="<" />
+                            <input type="button" class="boton manyana" style="padding: 10px !important" value=">" />
+                        </div>
+                        <div style="display: block; overflow: hidden; float: right; margin-top: 8px; margin-bottom: 3px">
+                            <a id="ctl00_ContentPlaceHolderContenido_HyperLinkPartidasPonerseEspera" class="botonAmarillo" href="WaitListAdd.aspx" style="margin-bottom: 4px"><img style='vertical-align:middle' src='../images/icon-partidas-espera.png'/> IR A LISTA DE ESPERA</a>
+                        </div>
+                    </div>
+                    <div class="myReservas" style="text-align: center">
+                        <img id="imgCarga" style="width: 15%; left: 50%; z-index: -1;" src="cargando.svg"></img>
+                        <svg id="tablaReserva" version="1.1" x="0" y="0" preserveaspectratio="xMinYMin meet">
+                        </svg>
+                    </div>
+                    <div style="display: block; overflow: hidden; text-align: center; margin-top: 10px;
+                        margin-bottom: 10px; width: 100%;">
+                        <img id="ctl00_ContentPlaceHolderContenido_Image1" class="icono-reserva-rojo" src="../images/icono-reserva-rojo.jpg" style="border-width:0px;vertical-align: middle; margin-right: 5px" /><span id="ctl00_ContentPlaceHolderContenido_Label5" class="icono-reserva-rojo" style="margin-right: 10px">Espacio ocupado</span>
+                        <img id="ctl00_ContentPlaceHolderContenido_ImageIconoPartidas" class="icono-reserva-verde" src="../images/icono-reserva-verde.jpg" style="border-width:0px;vertical-align: middle; margin-right: 5px" /><span id="ctl00_ContentPlaceHolderContenido_LabelIconoPartidas" class="icono-reserva-verde" style="margin-right: 10px">Partido</span>
+                        <img id="ctl00_ContentPlaceHolderContenido_Image3" class="icono-reserva-azul" src="../images/icono-reserva-azul.jpg" style="border-width:0px;vertical-align: middle; margin-right: 5px" /><span id="ctl00_ContentPlaceHolderContenido_Label2" class="icono-reserva-azul" style="margin-right: 10px">Tus reservas</span>
+                    </div>
+                    <div style="display: block; overflow: hidden; text-align: center">
+                        <p></p>
+                    </div>
+                    <div style="display: none">
+                        <div id="dialogReserva" class='flex-init-setup'>
+
+                            <div style="display:block; overflow:hidden; margin-top:10px">
+                                <div style="float: left; margin-right: 5px; display: block; overflow: hidden; border-radius: 60px;
+                                    -webkit-border-radius: 60px; -moz-border-radius: 60px; width:80px; height:80px;
+                                    border: 2px solid #e8e8e8; background-color: #e8e8e8">
+                                        <img  id="ImagePista" src="/images/pista-no-photo.jpg" style="width:100%; object-fit: cover; height: 100%;" />
+                                </div>
+                                <div style="display: block; overflow: hidden; margin-top: 10px; margin-bottom:5px">
+                                    <div style="display: block; overflow: hidden; margin-bottom: 5px">
+                                       <img id="ctl00_ContentPlaceHolderContenido_Image6" src="../images/icon-location.png" style="border-width:0px;vertical-align: middle; float: left; margin-right: 5px; width: 28px" />
+                                       <h1 style="margin-left: 0px; padding-left: 0px; padding-bottom:0px; padding-top:0px; font-size:18px; text-transform: initial; float:none">
+                                           <span style="padding-top:5px; font-weight: 500" id="LabelReservaPistas"></span></h1>
+                                    </div>
+                                    <img id="ctl00_ContentPlaceHolderContenido_Image4" src="../images/icon-clock.png" style="border-width:0px;vertical-align: middle; float: left; margin-right: 5px; width: 28px" />
+                                    <h4>
+                                        <span id="LabelFechaHora"  class="textoVerde" style="font-weight: 500; padding-top: 5px; display: table; font-size:15px"></span>
+                                    </h4>
+                                </div>
+                            </div>
+
+
+                            <svg id="reserva" class="reserva" title="Reserva">
+                            </svg>
+                            <div class="footerReservas">
+                                <input type="checkbox" id="terminos" name="radio" />
+                                <span data-i18n="table.ireedterm"></span>
+                                <a data-i18n="table.hiring" class="TextoLink normativa" target="_blank" href="https://padelestorilcl.matchpoint.com.es/files.ashx?id=5ae277abb1e697e13e0fa0082192ac6b"></a>
+                            </div>
+                        </div>
+                        <div id="dialogTerminos">
+                            <span data-i18n="table.ireedterm"></span>
+                                <a data-i18n="table.normative" class="TextoLink normativa" target="_blank" href="https://padelestorilcl.matchpoint.com.es/files.ashx?id=5ae277abb1e697e13e0fa0082192ac6b"></a>
+                        </div>
+
+                        <div class="ContenedorCuadroReservas ">
+                            <div class="contenedorCabecera">
+                            </div>
+                        </div>
+                        <input type="button" class="boton">
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="ctl00$ContentPlaceHolderContenido$WUCCargadorSeccionesTrasElCuadro$HiddenFieldIdPagina" id="ctl00_ContentPlaceHolderContenido_WUCCargadorSeccionesTrasElCuadro_HiddenFieldIdPagina" />
+<input type="hidden" name="ctl00$ContentPlaceHolderContenido$WUCCargadorSeccionesTrasElCuadro$HiddenFieldSeccionesACargar" id="ctl00_ContentPlaceHolderContenido_WUCCargadorSeccionesTrasElCuadro_HiddenFieldSeccionesACargar" />
+
+
+
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    var uiculture = 'es-CL';
+
+    dateParameters = {
+        "fechaActualCentro": "23/02/2023",
+        "horaActualCentro": "11:58",
+        "fechaActualCentro_dia": 23,
+        "fechaActualCentro_mes": 2,
+        "fechaActualCentro_anyo": 2023,
+        "fechaInicioCalendario_dia": 23,
+        "fechaInicioCalendario_mes": 2,
+        "fechaInicioCalendario_anyo": 2023,
+    };
+
+        global = { "uiculture": uiculture};
+
+        idcuadroAspLoad =0;
+
+
+
+
+    if (!window.jQuery) {
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        var scripts = [
+		"",
+         "../scripts/i18next-1.6.3.min.js",
+        "../booking/js/idiomas.js",
+        "../scripts/Moment/moment-with-locales.min.js",
+		"../scripts/jquery.svg/jquery.svg.min.js",
+		"../scripts/jquery.ui/jquery-ui.min.js",
+		"../scripts/datepicker/idiomas.js",
+        "../scripts/generaTabla/utiles.js",
+		"../scripts/generaTabla/estructura.js",
+		"../scripts/generaTabla/funcionesUI.js",
+		"../booking/js/ajax.js?ver=2.1",
+		"../booking/js/tabla.js?ver=2.1",
+		"../booking/js/banner.js?ver=2.1"
+
+		];
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            // If Internet Explorer, return version number
+            scripts[0] = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+        }
+        else {
+            // If another browser, return 0
+            scripts[0] = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"
+        }
+
+
+        var charged = 0;
+        function loadScripts2(scripts) {
+            var script = scripts.shift();
+            var el = document.createElement('script');
+            el.src = script;
+            el.onload = function (script) {
+                if (scripts.length) {
+                    loadScripts2(scripts);
+                } else {
+
+                }
+            };
+
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
+
+
+        loadScripts2(scripts);
+
+    } else {
+        var scripts = [
+         "../scripts/i18next-1.6.3.min.js",
+        "../booking/js/idiomas.js",
+        "../scripts/Moment/moment-with-locales.min.js",
+		"../scripts/jquery.svg/jquery.svg.min.js",
+		"../scripts/jquery.ui/jquery-ui.min.js",
+		"../scripts/datepicker/idiomas.js",
+        "../scripts/generaTabla/utiles.js",
+		"../scripts/generaTabla/estructura.js",
+		"../scripts/generaTabla/funcionesUI.js",
+		"../booking/js/ajax.js?ver=2.1",
+		"../booking/js/tabla.js?ver=2.1",
+		"../booking/js/banner.js?ver=2.1"
+		];
+        function loadScripts2(scripts) {
+            var script = scripts.shift();
+            var el = document.createElement('script');
+            el.src = script;
+            el.onload = function (script) {
+                if (scripts.length) {
+                    loadScripts2(scripts);
+                } else {
+
+                }
+            };
+
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
+        loadScripts2(scripts);
+    }
+
+    </script>
+
+
+
+
+              </div>
+
+           </div>
+           <!-- FIN CONTENIDO -->
+           <div class="clear"></div>
+      </div>
+    </div>
+
+
+
+    <footer class="footer">
+        <div class="wrap_pie">
+            <div class="section group">
+                <div class="col_1_of_4 span_1_of_4">
+                    <h3><span id="ctl00_Label1">DESCARGA NUESTRA APP</span></h3>
+                    <a href="https://play.google.com/store/apps/details?id=es.tpc.matchpoint.appclient.padelestoril" target="_blank"><img src="../PadelEstoril/img/icon-google-play.png" style="width:160px" alt="GOOGLE PLAY" title="GOOGLE PLAY" /></a>
+                    <a href="https://apps.apple.com/us/app/padel-estoril/id1585198243" target="_blank"><img src="../PadelEstoril/img/icon-app-store.png" style="width:160px" alt="APP STORE" title="APP STORE" /></a>
+                </div>
+
+                <div class="col_1_of_4 span_1_of_4" >
+                    <h3><span><span id="ctl00_Label10">CONTACTO</span></span></h3>
+                    <div id="ctl00_divInfoPie">
+                        <span style="font-weight:bold">© Padel Estoril</span><br />Av Las Condes 10480, Vitacura. <br/>  <br/>Tel. +569 88237776<br /><a href="mailto:padelestoril@gmail.com" class="LinkPie" target="_blank">padelestoril@gmail.com</a>
+                    </div>
+                </div>
+
+                <div id="ctl00_Div3" class="col_1_of_4 span_1_of_4">
+                    <h3><span id="ctl00_LabelTituloLegalidad">LEGALIDAD</span></h3>
+                        <div class="menuhorizPie">
+                               <ul>
+                                    <li><a id="ctl00_HyperLinkAvisoLegal" href="https://padelestorilcl.matchpoint.com.es/files.ashx?id=eb6e3bba10bed079d46872428918d3e5" target="_blank">Aviso legal</a></li><br />
+                                    <li></li><br />
+                                    <li></li><br />
+                                    <li><a id="ctl00_HyperLinkCondicionesDeUso" href="https://padelestorilcl.matchpoint.com.es/files.ashx?id=5ae277abb1e697e13e0fa0082192ac6b" target="_blank">Política de contratación</a></li>
+                               </ul>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="copy-right" id="div4">
+			<div class="wrap_pie">
+			        <a href="https://tpcmatchpoint.com" target="_blank">
+                        <img id="ctl00_ImageLogoMatchPoint" src="../images/logo-matchpoint-blanco-pq.png" alt="Management Software Sports Centres" style="border-width:0px;vertical-align: middle" />
+                        <br/>
+                        <span id="ctl00_LabelTituloMatchPoint">Software de gestión de centros deportivos</span>
+                    </a>
+		        <div class="clear"></div>
+		    </div>
+	    </div>
+    </footer>
+    <div class="pie2"></div>
+
+    </div>
+
+
+<div id="banner-cookies-preferences" class="banner-cookies-hidden">
+            <input type="hidden" name="ctl00$HiddenTiposCookiesSeleccionados" id="ctl00_HiddenTiposCookiesSeleccionados" />
+            <div id="contenido" class="contenido-cookie">
+                <div id="texto-introdución">
+                    <label style="display:none">
+                        <b>
+                            Esta página usa cookies
+                        </b>
+                    </label>
+                    <p>
+                        Las cookies de este sitio web se usan para personalizar el contenido y los anuncios, ofrecer funciones de redes sociales y analizar el tráfico. Además, compartimos información sobre el uso que haga del sitio web con nuestros partners de redes sociales, publicidad y análisis web, quienes pueden combinarla con otra información que les haya proporcionado o que hayan recopilado a partir del uso que haya hecho de sus servicios.
+                    </p>
+                </div>
+                <div id="botoneria">
+
+                   <input type="submit" name="ctl00$ButtonPermitirNecesarios" value="Solo usar cookies necesarias" id="ctl00_ButtonPermitirNecesarios" class="boton boton-userpreferences" style="margin-left:0px" />
+                    <input type="submit" name="ctl00$ButtonPermitirSeleccion" value="Permitir cookies seleccionadas" id="ctl00_ButtonPermitirSeleccion" class="boton boton-userpreferences" />
+                    <input type="submit" name="ctl00$ButtonPermitirTodos" value="Permitir todas las cookies" id="ctl00_ButtonPermitirTodos" class="boton boton-userpreferences" />
+                </div>
+                <div id="check-box-selections">
+                </div>
+                <div id="detalles-userpreferences">
+                    <div class="tab">
+                        <input type="button" class="tablinks tab-button" onclick="openCookieOption(event, 'cookie-declaration')" value="Cookie Declaration" />
+                        <input type="button" class="tablinks tab-button" onclick="openCookieOption(event, 'about-cookies')" value="About cookies" />
+                    </div>
+
+                    <div id="cookie-declaration" class="tabcontent" style="overflow: auto;">
+                        <div class="col-25 tab-left" id="tab-left">
+                        </div>
+                        <div class="col-75" id="tab-right">
+                        </div>
+                    </div>
+
+                    <div id="about-cookies" class="tabcontent">
+                    </div>
+
+                </div>
+            </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+window.mp_textos = window.mp_textos || {};window.mp_textos.cookiesPolitica = 'Utilizamos cookies propias y de terceros para mejorar nuestros servicios mediante el análisis de sus hábitos de navegación. Si continua navegando, consideramos que acepta su uso.';window.mp_textos.cookiesAceptar = 'Aceptar';window.mp_textos.cookiesVerPolitica = 'Ver politica';window.mp_textos.cookiesUrlPolitica = '../politica-cookies-es.html';cargarValoresIniciales();(function() {var fn = function() {$get("ctl00_ScriptManager1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+Sys.Application.setServerId("ctl00_ScriptManager1", "ctl00$ScriptManager1");
+
+Sys.Application._enableHistoryInScriptManager();
+Sys.Application.initialize();
+//]]>
+</script>
+</form>
+
+
+
+</body>
+</html>

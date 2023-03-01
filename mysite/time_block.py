@@ -33,3 +33,35 @@ class TimeBlock:
 			self.duration_text =  "4 hrs"
 
 		return 
+
+class TimeBlock2:
+	"""
+	Creates an object that represents the available block of time in which a court is available to play in
+	"""
+
+	def __init__(self, club_id, initial_time, final_time, court_name, court_value, court_size):
+		
+		self.club_id = club_id
+		self.initial_time = initial_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+		self.final_time = final_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+		self.court_name = court_name
+		self.court_value = court_value
+		self.duration_text = ""
+		self.court_size = court_size
+
+	def save_block_duration_text(self):
+		duration = datetime.strptime(self.final_time, "%Y-%m-%dT%H:%M:%S.%fZ") - datetime.strptime(self.initial_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+		if duration.total_seconds()/60 == 60:
+			self.duration_text = "1 h"
+		elif duration.total_seconds()/60 == 90:
+			self.duration_text =  "1,5 hrs"
+		elif duration.total_seconds()/60 == 120:
+			self.duration_text =  "2 hrs"
+		elif duration.total_seconds()/60 == 150:
+			self.duration_text =  "2,5 hrs"
+		elif duration.total_seconds()/60 == 180:
+			self.duration_text =  "3 hrs"
+		elif duration.total_seconds()/60 == 240:
+			self.duration_text =  "4 hrs"
+
+		return 	
