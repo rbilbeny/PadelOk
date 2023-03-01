@@ -63,8 +63,8 @@ def handle_request_get_single_scraper():
 def handle_request_get_single_scraper2():
     club_id  = str(request.args.get('club_id'))
     search_date = str(request.args.get('date'))
-    initial_time = str(request.args.get('initial_time'))
-    final_time = str(request.args.get('final_time'))
+    initial_time = str(request.args.get('initial_time', ""))
+    final_time = str(request.args.get('final_time', ""))
 
     search_date = datetime.strptime(search_date, "%Y-%m-%d")
 
