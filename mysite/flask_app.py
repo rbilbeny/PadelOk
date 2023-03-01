@@ -60,7 +60,7 @@ def handle_request_get_single_scraper():
 
 
 @app.route('/get_single_scraper2', methods=['GET'])
-def handle_request_get_single_scraper():
+def handle_request_get_single_scraper2():
     club_id  = str(request.args.get('club_id'))
     search_date = str(request.args.get('date'))
     initial_time = str(request.args.get('initial_time'))
