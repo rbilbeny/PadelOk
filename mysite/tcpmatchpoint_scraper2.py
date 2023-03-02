@@ -162,7 +162,7 @@ def price_to_int(price):
 		return 0
 	price = price.replace("$","")
 	price = price.replace(".","")
-	price = price.replace(",",".")
+	price = price.split(",")[0]
 
 	return int(price)
 
@@ -352,6 +352,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 				#print("Exact same block it's not already in the list, SO IT'S BEEN SAVED!")
 				try :
 					block_price = matching_block_price
+					matching_block_price = 0
 				except:
 					block_price = 0
 

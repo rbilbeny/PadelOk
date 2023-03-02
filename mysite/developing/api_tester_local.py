@@ -59,7 +59,7 @@ def test_multi_search1():
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
 def test_club_search2(): 
-    response = local_flask_app.handle_request_get_single_scraper2("1671573721228x274856123451891360", "2023-03-02", "18:00", "20:00")
+    response = local_flask_app.handle_request_get_single_scraper2("1671576483233x664693423202648700", "2023-03-02", "17:00", "19:30")
     
     print(response)
     print("Total courts found: " + str(len(json.loads(response)["results"])))    
