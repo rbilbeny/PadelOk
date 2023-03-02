@@ -243,9 +243,12 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 
 
 
-def is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
+def is_block_already_listed(current_block_initial_time, current_block_final_time, court_name, block_list):
 	for block_in_list in block_list:
-		if block_in_list.initial_time == block_initial_time and block_in_list.final_time == block_final_time and block_in_list.court_name == court_name:
+		block_in_list_initial_time = datetime.strptime(block_in_list.initial_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+		block_in_list_final_time = datetime.strptime(block_in_list.final_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+		if block_in_list_initial_time == current_block_initial_time and block_in_list_final_time == current_block_final_time and block_in_list.court_name == court_name:
 			return True
 	return False
 
@@ -314,20 +317,21 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 		court_name = court["TextoPrincipal"]
 		fixed_time_blocks = court["HorariosFijos"]
 		occupied_time_blocks = court["Ocupaciones"]
+		#print("court_name:", court_name)
 		
 		for match_duration in match_durations:
-		
+			
+			#print("match_duration:", match_duration, "minutes")
 			current_time = initial_search_time
 
 			while current_time <= final_search_time - timedelta(minutes=match_duration):
 				
-				current_block = (current_time, current_time + timedelta(minutes=match_duration))
-				#print("current_block:", current_block)	
+				current_block = (current_time, current_time + timedelta(minutes=match_duration))	
 				
 				if not(is_current_block_available(current_block, occupied_time_blocks)):
 					current_time += search_resolution
 					continue
-				#print("it's available")
+				#print("current_block it's available:", current_block)
 				if is_current_block_overlaping_fixed_block(current_block, fixed_time_blocks):
 					current_time += search_resolution
 					continue
@@ -344,14 +348,13 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 				if is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
 					current_time += search_resolution
 					continue
-				#print("Exact same block it's not already in the list")
+				#print("Exact same block it's not already in the list, SO IT'S BEEN SAVED!")
 				try :
 					block_price = matching_block_price
 				except:
 					block_price = 0
 
-				new_block = TimeBlock2(club.id, block_initial_time, block_final_time, court_name, block_price, get_court_size(court_name))
-				new_block.save_block_duration_text()		
+				new_block = TimeBlock2(club.id, block_initial_time, block_final_time, court_name, match_duration, block_price, get_court_size(court_name))	
 				block_list.append(new_block)
 							
 				current_time += search_resolution

@@ -33,7 +33,7 @@ def test_club_search():
 
 def test_club_search2():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper2"
-    params = {"club_id" : "1671576483233x664693423202648700", "date" : "2023-03-01", "initial_time" : "16:00", "final_time" : "22:00"}
+    params = {"club_id" : "1671573721228x274856123451891360", "date" : "2023-03-01", "initial_time" : "14:00", "final_time" : "18:00"}
     response = requests.get(URL, params=params)
     
     #LOCAL EQUALS WEB
