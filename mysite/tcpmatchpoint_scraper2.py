@@ -243,12 +243,13 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 
 
 
-def is_block_already_listed(current_block_initial_time, current_block_final_time, court_name, block_list):
+def is_block_already_listed(current_block_initial_time, current_block_final_time, court_name, current_block_match_duration, block_list):
 	for block_in_list in block_list:
 		block_in_list_initial_time = datetime.strptime(block_in_list.initial_time, "%Y-%m-%dT%H:%M:%S.%fZ")
 		block_in_list_final_time = datetime.strptime(block_in_list.final_time, "%Y-%m-%dT%H:%M:%S.%fZ")
 
-		if block_in_list_initial_time == current_block_initial_time and block_in_list_final_time == current_block_final_time and block_in_list.court_name == court_name:
+		if block_in_list_initial_time == current_block_initial_time and block_in_list_final_time == current_block_final_time \
+		and block_in_list.court_name == court_name and block_in_list.match_duration == current_block_match_duration:
 			return True
 	return False
 
@@ -345,7 +346,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 				else:	
 					block_initial_time = current_block[0]
 					block_final_time = current_block[1]
-				if is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
+				if is_block_already_listed(block_initial_time, block_final_time, court_name, match_duration, block_list):
 					current_time += search_resolution
 					continue
 				#print("Exact same block it's not already in the list, SO IT'S BEEN SAVED!")
