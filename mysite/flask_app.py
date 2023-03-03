@@ -13,6 +13,7 @@ from club import Club, Club2
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
 
+#RECEIVES CLUB DATABASE ENDPOINT
 @app.route('/post_clubs', methods=['POST'])
 def handle_request_post_clubs():
     input_text = str(request.form.get('clubs'))
@@ -22,14 +23,13 @@ def handle_request_post_clubs():
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as updated_clubs:
         lines = updated_clubs.readlines()
         line = lines[0]
-
-    #LOCAL EQUALS WEB
     json_clubs = line
     return {"result" : json_clubs}
 
 
 
-
+#SCRAPES ONE CLUB ENDPOINT
+# Version1, today in production 
 @app.route('/get_single_scraper', methods=['GET'])
 def handle_request_get_single_scraper():
     search_type = str(request.args.get('search_type'))
@@ -41,8 +41,6 @@ def handle_request_get_single_scraper():
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
-
-    #LOCAL EQUALS WEB
     club = Club(line, club_id)
     single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
     single_club_search.scrape()   
@@ -56,18 +54,14 @@ def handle_request_get_single_scraper():
     response = json.dumps(json_courts, indent=4)
     return response
 
-
-
-
+# Version2, future development 
 @app.route('/get_single_scraper2', methods=['GET'])
 def handle_request_get_single_scraper2():
     club_id  = str(request.args.get('club_id'))
     search_date = str(request.args.get('date'))
     initial_time = str(request.args.get('initial_time', ""))
     final_time = str(request.args.get('final_time', ""))
-
     search_date = datetime.strptime(search_date, "%Y-%m-%d")
-
     club = Club2(club_id)
     single_club_search = ClubSearch2(club, search_date)
     single_club_search.scrape(initial_time, final_time)   
@@ -83,7 +77,8 @@ def handle_request_get_single_scraper2():
 
 
 
-
+#SCRAPES MULTIPLE CLUB ENDPOINT
+# Version1, today in production 
 @app.route('/post_multi_scraper1', methods=['POST'])
 def handle_request_post_multi_scraper1():
     search_type = request.form.get('search_type')
@@ -95,8 +90,6 @@ def handle_request_post_multi_scraper1():
     with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
-
-    #LOCAL EQUALS WEB
     clubs_ids_list = clubs_ids_text.split(", ")
     multisearch_result_list = list()
     search_error_list = []
@@ -114,11 +107,32 @@ def handle_request_post_multi_scraper1():
     response = json.dumps(json_courts, indent=4)
     return response
 
-
-
-
+# Version2, future development
 @app.route('/post_multi_scraper2', methods=['POST'])
 def handle_request_post_multi_scraper2():
+    clubs_ids_text = request.form.get('clubs_ids')
+    search_date = request.form.get('date')
+    initial_time_str = request.form.get('initial_time', "")
+    final_time_str = request.form.get('final_time', "") 
+    search_date = datetime.strptime(search_date, "%Y-%m-%d")
+    clubs_ids_list = clubs_ids_text.split(", ")
+    multisearch_result_list = list()
+    search_error_list = []
+    for club_id in clubs_ids_list:
+        club = Club2(club_id)
+        single_club_search = ClubSearch2(club, search_date)
+        single_club_search.scrape(initial_time_str, final_time_str)
+        for block in single_club_search.result:
+            multisearch_result_list.append(block.__dict__) 
+        if single_club_search.error != None:
+            search_error_list.append({"error_message": single_club_search.error})    
+    json_courts = {"results": multisearch_result_list, "errors": search_error_list}
+    response = json.dumps(json_courts, indent=4)
+    return response
+
+# Version3, adding async feature, not working yet
+@app.route('/post_multi_scraper_async', methods=['POST'])
+def handle_request_post_multi_scraper_async():
     search_type = request.form.get('search_type')
     clubs_ids_text = request.form.get('clubs_ids')
     search_date = request.form.get('date')

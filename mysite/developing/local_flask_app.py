@@ -7,7 +7,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from search import ClubSearch, ClubSearch2
 from club import Club, Club2
 
-
+#RECEIVES CLUB DATABASE ENDPOINT
 def handle_request_post_clubs(input_text):
     input_text = input_text.replace('\\', "")
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'w') as clubs:
@@ -15,20 +15,17 @@ def handle_request_post_clubs(input_text):
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as updated_clubs:
         lines = updated_clubs.readlines()
         line = lines[0]    
-    
-    #LOCAL EQUALS WEB
     json_clubs = line
     return {"result" : json_clubs}
 
 
 
-
+#SCRAPES ONE CLUB ENDPOINT
+# Version1, today in production 
 def handle_request_get_single_scraper(search_type, club_id, date, inital_time, final_time, match_duration): 
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
-    
-    #LOCAL EQUALS WEB
     club = Club(line, club_id)
     single_club_search = ClubSearch(search_type, club, date, inital_time, final_time, match_duration)
     single_club_search.scrape()   
@@ -42,41 +39,34 @@ def handle_request_get_single_scraper(search_type, club_id, date, inital_time, f
     response = json.dumps(json_courts, indent=4)
     return response
 
-
-
+# Version2, future development 
 def handle_request_get_single_scraper2(club_id, date, initial_search_time_str, final_search_time_str): 
-
     date = datetime.strptime(date, "%Y-%m-%d")
     club = Club2(club_id)
     single_club_search = ClubSearch2(club, date)
     single_club_search.scrape(initial_search_time_str, final_search_time_str)   
-
     search_result_list = []
     search_error_list = []
-
     for block in single_club_search.result:
         search_result_list.append(block.__dict__)
-
     if single_club_search.error != None:
         search_error_list.append({"error_message": single_club_search.error})
-
     json_courts = {"results": search_result_list, "errors": search_error_list}
     response = json.dumps(json_courts, indent=4)
     return response
 
 
 
+#SCRAPES MULTIPLE CLUB ENDPOINT
+# Version1, today in production 
 def handle_request_post_multi_scraper1(search_type, clubs_ids, date, inital_time, final_time, match_duration): 
     with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as clubs:
         lines = clubs.readlines()
         line = lines[0]
-    
-    #LOCAL EQUALS WEB
     search_date = date
     clubs_ids_list = clubs_ids.split(", ")
     multisearch_result_list = list()
     search_error_list = []
-
     for club_id in clubs_ids_list:
         club = Club(line, club_id)
         single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
@@ -85,8 +75,24 @@ def handle_request_post_multi_scraper1(search_type, clubs_ids, date, inital_time
             multisearch_result_list.append(block.__dict__) 
         if single_club_search.error != None:
             search_error_list.append({"error_message": single_club_search.error})    
-
     json_courts = {"results": multisearch_result_list, "errors": search_error_list}
     response = json.dumps(json_courts, indent=4)
     return response
 
+# Version2, future development
+def handle_request_post_multi_scraper2(clubs_ids, date, initial_time_str, final_time_str): 
+    date = datetime.strptime(date, "%Y-%m-%d")
+    clubs_ids_list = clubs_ids.split(", ")
+    multisearch_result_list = list()
+    search_error_list = []
+    for club_id in clubs_ids_list:
+        club = Club2(club_id)
+        single_club_search = ClubSearch2(club, date)
+        single_club_search.scrape(initial_time_str, final_time_str)
+        for block in single_club_search.result:
+            multisearch_result_list.append(block.__dict__) 
+        if single_club_search.error != None:
+            search_error_list.append({"error_message": single_club_search.error})    
+    json_courts = {"results": multisearch_result_list, "errors": search_error_list}
+    response = json.dumps(json_courts, indent=4)
+    return response
