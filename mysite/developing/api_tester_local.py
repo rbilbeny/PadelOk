@@ -48,7 +48,7 @@ def test_club_search():
 
 # Version2, future development  
 def test_club_search2(): 
-    response = local_flask_app.handle_request_get_single_scraper2("1673445939619x571277648445580560", "2023-03-04", "14:00", "17:00")
+    response = local_flask_app.handle_request_get_single_scraper2("1671575899691x174113495399525380", "2023-03-04", "14:00", "17:00")
     print(response)
     print("Total courts found: " + str(len(json.loads(response)["results"])))
 
@@ -80,5 +80,5 @@ def test_multi_search2():
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
     
 #currently being tested:
-test_multi_search1()
+test_club_search2()
 

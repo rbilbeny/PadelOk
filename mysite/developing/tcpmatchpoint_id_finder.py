@@ -223,8 +223,8 @@ def is_block_already_listed(block_initial_time, block_final_time, court_name, bl
 
 
 
-url_base = "https://clubpadelpieandino.matchpoint.com.es"
-url_path_scraper = "/Booking/Grid.aspx?id=4"
+url_base = "http://www.bullpadelcenter.cl"
+url_path_scraper = "/Booking/Grid.aspx"
 calendar_url = url_base + url_path_scraper
 id_url = url_base + "/booking/srvc.aspx/ObtenerCuadros"
 API_url = url_base + "/booking/srvc.aspx/ObtenerCuadro"
@@ -239,7 +239,7 @@ while n < nmax:
 
 	id = n
 	print("id forzado:",str(id))
-	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id,"23/2/2023")
+	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id,"4/3/2023")
 	club_ = calendar["d"]["Nombre"]
 	print("nombre del club:",club_)
 	n = n+1
