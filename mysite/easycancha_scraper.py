@@ -71,20 +71,20 @@ def scraper(result_type, club, date, inital_search_time, final_search_time, matc
 	for alternative_slot in calendar["alternative_timeslots"]:
 		block_initial_time = alternative_slot["hour"][:5]
 		block_final_time = (datetime.strptime(block_initial_time, "%H:%M")+timedelta(minutes=match_duration)).strftime("%H:%M")
-		print(block_initial_time, block_final_time)
+		#print(block_initial_time, block_final_time)
 		for time_slot in alternative_slot["timeslots"]:
 			court_name = time_slot["courtText"]
 			block_price = time_slot["priceInfo"]["amount"]
-			print(court_name, block_price)
+			#print(court_name, block_price)
 			if datetime.strptime(block_initial_time, "%H:%M") < initial_search_time_date or datetime.strptime(block_final_time, "%H:%M") > final_search_time_date:
 				continue
-			print("Block is inside the search time")
+			#print("Block is inside the search time")
 			if result_type == "one_court_per_time_block" and is_initial_time_already_listed(block_initial_time, block_list):
 				continue
-			print("Initial time it's not already in the list")
+			#print("Initial time it's not already in the list")
 			if is_block_already_listed(block_initial_time, block_final_time, court_name, block_list):
 				continue
-			print("Exact same block it's not already in the list")
+			#print("Exact same block it's not already in the list")
 			new_block = TimeBlock(club.id, date, block_initial_time, block_final_time, court_name, block_price)
 			new_block.save_block_duration_text()		
 			block_list.append(new_block)
