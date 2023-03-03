@@ -176,7 +176,7 @@ async def scrape_one_club(search_type, line, club_id, search_date, inital_time, 
 @app.route('/get_big_file', methods=['POST'])
 def get_big_file():
     # load the JSON object from the file
-    with open("/home/rodrigobilbeny/mysite/big_file.json", 'r', 'r') as f:
+    with open("/home/rodrigobilbeny/mysite/big_file.json", 'r') as f:
         data = json.load(f)
 
     response = json.dumps(data, indent=4)

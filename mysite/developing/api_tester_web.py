@@ -73,6 +73,19 @@ def test_multi_search2():
     print("Total courts found: " + str(len(response.json()["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
+
+
+#TESTING DOWNLOAD BIG FILE
+def test_download_big_file(): 
+    URL = "http://rodrigobilbeny.pythonanywhere.com/get_big_file"
+    start_time = time.time()
+    response = requests.post(URL)
+    duration = time.time() - start_time
+    print(response.json())
+    #print(json.dumps(response.json(), indent=4))
+    print("Total courts found: " + str(len(response.json()["results"])))
+    print(f"Download big file in {duration} seconds")
+
 #currently being tested:
-test_multi_search2()
+test_download_big_file()
 
