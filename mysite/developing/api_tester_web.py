@@ -45,7 +45,7 @@ def test_club_search2():
  #TESTING MULTIPLE CLUB SCRAPING 
  # Version1, today in production    
 def test_multi_search1(): 
-    list_text = "1673490570675x792741118020681700, 1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
+    list_text = "1671577853813x106374013286446580, 1671577915340x390973186142454140, 1672937689649x192587306672282980, 1672937866698x632993144245844400, 1672938013033x655033704969171700, 1672938517230x520189294743913300, 1672938875045x216412821943450240, 1672939093380x996690018588664400, 1672939566137x142975334652431840, 1672939657838x479880029407924600"
     URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper1"
     data = {"search_type" : "all_courts", "clubs_ids" : list_text, "date" : "17/2/2023", "initial_time" : "17:00", "final_time" : "24:00", "match_duration" : 90}
     start_time = time.time()
@@ -62,7 +62,7 @@ def test_multi_search1():
 def test_multi_search2(): 
     list_text = "1673490570675x792741118020681700, 1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200"
     URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper2"
-    data = {"clubs_ids" : list_text, "date" : "2023-03-03", "initial_time" : "14:00", "final_time" : "24:00"}
+    data = {"clubs_ids" : list_text, "date" : "2023-03-03", "initial_time" : "14:00", "final_time" : "23:59"}
     start_time = time.time()
     response = requests.post(URL, data=data)
     duration = time.time() - start_time
@@ -70,7 +70,7 @@ def test_multi_search2():
     total_clubs = len(clubs_list)
     print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json())))
+    print("Total courts found: " + str(len(response.json()["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
 #currently being tested:

@@ -36,11 +36,11 @@ class ClubSearch:
             except:
                 self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}." 
 
-        elif self.club.web_scraper == "playtomic":
-            #try: 
-            self.result = play_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
-            #except:
-            #    self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."                    
+        # elif self.club.web_scraper == "playtomic":
+        #     try: 
+        #         self.result = play_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
+        #     except:
+        #         self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."                    
 
         else:
             return
@@ -70,11 +70,11 @@ class ClubSearch2:
             except:
                 self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}." 
 
-        elif self.club.web_scraper == "playtomic":
-            #try: 
-            self.result = play_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
-            #except:
-            #    self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."                    
+        # elif self.club.web_scraper == "playtomic":
+        #     try: 
+        #         self.result = play_scraper(self.search_type, self.club, self.date, self.initial_time, self.final_time, self.match_duration)
+        #     except:
+        #         self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."                    
 
         else:
             return        

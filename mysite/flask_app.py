@@ -93,7 +93,6 @@ def handle_request_post_multi_scraper1():
     clubs_ids_list = clubs_ids_text.split(", ")
     multisearch_result_list = list()
     search_error_list = []
-
     for club_id in clubs_ids_list:
         club = Club(line, club_id)
         single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
@@ -102,7 +101,6 @@ def handle_request_post_multi_scraper1():
             multisearch_result_list.append(block.__dict__) 
         if single_club_search.error != None:
             search_error_list.append({"error_message": single_club_search.error})    
-
     json_courts = {"results": multisearch_result_list, "errors": search_error_list}
     response = json.dumps(json_courts, indent=4)
     return response
