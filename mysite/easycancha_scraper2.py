@@ -3,13 +3,13 @@ import json
 import re
 from datetime import datetime, timedelta
 
-from time_block import TimeBlock, TimeBlock2
+from time_block import TimeBlock2
 
 
 def get_calendar(sport_id, club_url_id, date, match_duration):
 
 	url = f"https://www.easycancha.com/api/sports/{sport_id}/clubs/{club_url_id}/timeslots?date={date}&timespan={match_duration}"
-	print(url)
+	#print(url)
 	while True:
 		try:
 			response = requests.get(url)
@@ -59,8 +59,8 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 	else:
 		final_search_time = date + timedelta(days=2)
 
-	print("initial_search_time:", initial_search_time)	
-	print("final_search_time:", final_search_time)		
+	#print("initial_search_time:", initial_search_time)	
+	#print("final_search_time:", final_search_time)		
 
 	#Set the variables for the loop
 	formatted_date = str(date.date())	
@@ -68,7 +68,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 
 	for match_duration in match_durations:
 		
-		print("match_duration:", match_duration)
+		#print("match_duration:", match_duration)
 		calendar = get_calendar(str(7), club.url_id, formatted_date, str(match_duration)) #7 is the internal sport ID for Padel at EasyCancha
 		#print(calendar)
 		#calendar_ = json.dumps(calendar, indent=4, sort_keys=True)
@@ -77,7 +77,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 		# Extracts some basic information for the club as a whole. Availabilty is evaluated at the court level.
 		try: 
 			club_ = calendar["alternative_timeslots"][0]["summary"][0]["clubName"]
-			print(club_)
+			#print(club_)
 		except:
 			continue	
 
@@ -98,4 +98,5 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 				new_block = TimeBlock2(club.id, block_initial_time, block_final_time, court_name, match_duration, block_price, get_court_size(court_name))	
 				block_list.append(new_block)
 			
-	return block_list		
+	return block_list
+

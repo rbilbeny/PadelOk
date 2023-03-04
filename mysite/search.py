@@ -77,7 +77,7 @@ class ClubSearch2:
         #         self.error = f"Error while scraping {self.club.name} with {self.club.web_scraper}."                    
 
         else:
-            return        
-
-
+            return      
         
+        
+

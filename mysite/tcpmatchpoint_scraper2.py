@@ -3,7 +3,7 @@ import json
 import re
 from datetime import datetime, timedelta
 
-from time_block import TimeBlock, TimeBlock2
+from time_block import TimeBlock2
 
 PROXY_ACTIVE = False
 API_KEY = ""
@@ -262,7 +262,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 
 	#Buils the URLs requiered for this particular scraper 
 	calendar_url = club.url_base + club.url_path_scraper
-	print(calendar_url)
+	#print(calendar_url)
 	id_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadros"
 	API_url = club.url_base + "/booking/srvc.aspx/ObtenerCuadro"
 
@@ -277,11 +277,11 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 	#For each of those cases, the id is forced to be the one specified in the club object, obtained previously through trial and error, manually. 
 	if club.url_id is None:
 		id = get_id(id_url,session_id,cheat_code)
-		print("id obtenido")
+		#print("id obtenido")
 	else:
 		id = club.url_id
-		print("id forzado")
-	print("id: "+ str(id))
+		#print("id forzado")
+	#print("id: "+ str(id))
 
 	#Third scrapping step, gets the calendar of the club for the specified date, which contains all the information needed to evaluate availability.
 	calendar = get_calendar(API_url, calendar_url, session_id, cheat_code, id, date.strftime('%d/%m/%Y'))
@@ -291,7 +291,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 
 	# Extracts some basic information for the club as a whole. Availabilty is evaluated at the court level.
 	club_ = calendar["d"]["Nombre"]
-	print(club_)
+	#print(club_)
 	courts = calendar["d"]["Columnas"]
 	initial_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M").time())
 	final_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M").time())
@@ -363,3 +363,5 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 
 	return block_list		
 
+
+	
