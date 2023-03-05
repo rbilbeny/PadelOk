@@ -65,8 +65,11 @@ def handle_request_get_single_scraper2():
     club = Club2(club_id)
     clubs = [club]
     single_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
-    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-        lines = searches.read()
+    try:
+        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
+            lines = searches.read()
+    except:
+        lines = "[]"        
     searches_data = json.loads(lines)
     searches = []
     for search_dict in searches_data:
@@ -136,8 +139,11 @@ def handle_request_post_multi_scraper2():
         club = Club2(club_id)
         clubs.append(club)
     multi_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
-    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-        lines = searches.read()
+    try:
+        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
+            lines = searches.read()
+    except:
+        lines = "[]" 
     searches_data = json.loads(lines)
     searches = []
     for search_dict in searches_data:

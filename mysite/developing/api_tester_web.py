@@ -36,6 +36,7 @@ def test_club_search2():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper2"
     params = {"club_id" : "1669903818955x480922479948817660", "date" : "2023-03-05", "initial_time" : "12:00", "final_time" : "13:30"}
     response = requests.get(URL, params=params)
+    print(response)
     print(json.dumps(response.json(), indent=4))
     print("Total courts found: " + str(len(response.json()["results"])))
 
@@ -74,5 +75,5 @@ def test_multi_search2():
 
 
 #currently being tested:
-test_multi_search2()
+test_club_search2()
 
