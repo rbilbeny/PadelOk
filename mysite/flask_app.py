@@ -95,19 +95,19 @@ def handle_request_get_single_scraper2():
     final_time_str = str(request.args.get('final_time', ""))
     club_ids = [club_id]
     single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
-    searches = get_searches()
-    searches.append(single_club_search)
-    save_searches(searches)
-    sleep(1)
-    still_running = True
-    while still_running:
-        sleep(0.5) 
-        searches = get_searches()
-        for search in searches:
-            if search.id == single_club_search.id and search.state == "finished":
-                still_running = False
-                break         
-    search_results = {"results": search.results, "errors": search.errors}       
+    # searches = get_searches()
+    # searches.append(single_club_search)
+    # save_searches(searches)
+    # sleep(1)
+    # still_running = True
+    # while still_running:
+    #     sleep(0.5) 
+    #     searches = get_searches()
+    #     for search in searches:
+    #         if search.id == single_club_search.id and search.state == "finished":
+    #             still_running = False
+    #             break         
+    search_results = single_club_search.scrape()     
     return search_results
 
 
