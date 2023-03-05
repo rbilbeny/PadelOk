@@ -31,7 +31,7 @@ def test_club_search():
 
 # Version2, future development  
 def test_club_search2(): 
-    response = local_flask_app.handle_request_get_single_scraper2("1669903818955x480922479948817660", "2023-03-05", "", "")
+    response = local_flask_app.handle_request_get_single_scraper2("1669903818955x480922479948817660", "2023-03-06", "", "")
     print(json.dumps(response, indent=4))
     print("Total courts found: " + str(len(response["results"])))
 

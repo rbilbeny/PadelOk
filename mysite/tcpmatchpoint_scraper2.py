@@ -297,16 +297,16 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 	initial_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M").time())
 	final_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M").time())
 
-	#If the club closes past midnight, the final time is set to the same time the next day.
-	if final_search_time < initial_search_time:
-		final_search_time  = final_search_time  + timedelta(days=1)	
-
 	#If you want to limit the search time interval, you can do it here.
 	if initial_search_time_str != "":
 		initial_search_time = datetime.combine(date, datetime.strptime(initial_search_time_str, "%H:%M").time())
 
 	if final_search_time_str != "":
-		final_search_time = datetime.combine(date, datetime.strptime(final_search_time_str, "%H:%M").time())		
+		final_search_time = datetime.combine(date, datetime.strptime(final_search_time_str, "%H:%M").time())	
+
+	#If the final_search_time is past midnight, the final time is set to the same time the next day.
+	if final_search_time < initial_search_time:
+		final_search_time  = final_search_time  + timedelta(days=1)			
 
 	#print("initial_search_time:", initial_search_time)	
 	#print("final_search_time:", final_search_time)		

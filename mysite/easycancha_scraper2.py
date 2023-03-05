@@ -60,6 +60,10 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 	else:
 		final_search_time = date + timedelta(days=2)
 
+	#If the final_search_time is past midnight, the final time is set to the same time the next day.
+	if final_search_time < initial_search_time:
+		final_search_time  = final_search_time  + timedelta(days=1)			
+
 	#print("initial_search_time:", initial_search_time)	
 	#print("final_search_time:", final_search_time)		
 
