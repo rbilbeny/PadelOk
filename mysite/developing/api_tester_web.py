@@ -34,11 +34,10 @@ def test_club_search():
 # Version2, future development
 def test_club_search2():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper2"
-    params = {"club_id" : "1671573721228x274856123451891360", "date" : "2023-03-02", "initial_time" : "14:00"}
+    params = {"club_id" : "1669903818955x480922479948817660", "date" : "2023-03-05", "initial_time" : "14:00"}
     response = requests.get(URL, params=params)
-    print(response)
     print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json()["results"]))) 
+    print("Total courts found: " + str(len(response.json()["results"])))
 
 
 
@@ -68,24 +67,12 @@ def test_multi_search2():
     duration = time.time() - start_time
     clubs_list = list_text.split(", ")
     total_clubs = len(clubs_list)
-    print(response)
     print(json.dumps(response.json(), indent=4))
     print("Total courts found: " + str(len(response.json()["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
 
 
 
-#TESTING DOWNLOAD BIG FILE
-def test_download_big_file(): 
-    URL = "http://rodrigobilbeny.pythonanywhere.com/get_big_file"
-    start_time = time.time()
-    response = requests.post(URL)
-    duration = time.time() - start_time
-    print(response.json())
-    #print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json()["results"])))
-    print(f"Download big file in {duration} seconds")
-
 #currently being tested:
-test_download_big_file()
+test_club_search2()
 

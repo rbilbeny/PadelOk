@@ -5,7 +5,7 @@ from easycancha_scraper2 import scraper as easy_scraper2
 
 class MultiSearch:
     """
-    Creates a Search that defines the scope of the court web scrapping for N clubs
+    Creates a Search that defines the scope of the court web scrapping for N clubs.
     """
 
     def __init__(self, clubs, date):
@@ -14,18 +14,18 @@ class MultiSearch:
         self.results = list()
         self.errors = list()
 
+    #This function handles the parallel scraping of all the clubs in the list using ThreadPoolExecutor as threading method
     def scrape(self, initial_search_time_str, final_search_time_str):
         with ThreadPoolExecutor() as executor:
             future_to_club = {executor.submit(scrape_single_club, club, self.date, initial_search_time_str, final_search_time_str): club for club in self.clubs}
             for future in future_to_club:
-                if future[1] is not None:
-                    self.errors.append(future[1])
+                if future.result()[1] is not None:
+                    self.errors.append(future.result()[1])
                 else:    
-                    for block in future[0]:
-                        self.results.append(block)
-
-        response= {"results": self.results, "errors": self.errors}                               
-        return response
+                    for block in future.result()[0]:
+                        self.results.append(block.__dict__)
+        json_courts = {"results": self.results, "errors": self.errors}                            
+        return json_courts
 
 
 
@@ -33,7 +33,7 @@ def scrape_single_club(club, date, initial_search_time_str, final_search_time_st
         single_club_results = list()
         single_club_error = None
         
-        if club.club.web_scraper == "tcpmatchpoint":
+        if club.web_scraper == "tcpmatchpoint":
             try: 
                 single_club_results = tcp_scraper2(club, date, initial_search_time_str, final_search_time_str)
             except:
@@ -48,5 +48,5 @@ def scrape_single_club(club, date, initial_search_time_str, final_search_time_st
         else :
             single_club_error.error = f"Error while scraping {club.name}: no valid scraper defined on clubs.json file."             
 
-        return single_club_results, single_club_error     
+        return (single_club_results, single_club_error)     
             
