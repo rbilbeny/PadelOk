@@ -1,6 +1,5 @@
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))

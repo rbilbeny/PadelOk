@@ -1,8 +1,6 @@
 from flask import Flask, request
 import json
 import sys
-from datetime import datetime
-from time import sleep
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent))
@@ -61,7 +59,7 @@ def handle_request_post_clubs():
 
 
 #SCRAPES ONE CLUB ENDPOINT
-# Version1, today in production 
+# Version1, deprecated
 @app.route('/get_single_scraper', methods=['GET'])
 def handle_request_get_single_scraper():
     search_type = str(request.args.get('search_type'))
@@ -86,7 +84,7 @@ def handle_request_get_single_scraper():
     response = json.dumps(json_courts, indent=4)
     return response
 
-# Version2, future development 
+# Version2, today in production 
 @app.route('/get_single_scraper2', methods=['GET'])
 def handle_request_get_single_scraper2():
     club_id  = str(request.args.get('club_id'))
@@ -95,25 +93,13 @@ def handle_request_get_single_scraper2():
     final_time_str = str(request.args.get('final_time', ""))
     club_ids = [club_id]
     single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
-    # searches = get_searches()
-    # searches.append(single_club_search)
-    # save_searches(searches)
-    # sleep(1)
-    # still_running = True
-    # while still_running:
-    #     sleep(0.5) 
-    #     searches = get_searches()
-    #     for search in searches:
-    #         if search.id == single_club_search.id and search.state == "finished":
-    #             still_running = False
-    #             break         
     search_results = single_club_search.scrape()     
     return search_results
 
 
 
 #SCRAPES MULTIPLE CLUB ENDPOINT
-# Version1, today in production 
+# Version1, deprecated
 @app.route('/post_multi_scraper1', methods=['POST'])
 def handle_request_post_multi_scraper1():
     search_type = request.form.get('search_type')
@@ -140,7 +126,7 @@ def handle_request_post_multi_scraper1():
     response = json.dumps(json_courts, indent=4)
     return response
 
-# Version2, future development
+# Version2, today in production
 @app.route('/post_multi_scraper2', methods=['POST'])
 def handle_request_post_multi_scraper2():
     clubs_ids_text = request.form.get('clubs_ids')
@@ -149,18 +135,5 @@ def handle_request_post_multi_scraper2():
     final_time_str = request.form.get('final_time', "") 
     clubs_ids_list = clubs_ids_text.split(", ")
     multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
-    # searches = get_searches()
-    # searches.append(multi_club_search)
-    # save_searches(searches)
-    # sleep(1)
-    # still_running = True
-    # while still_running:
-    #     sleep(0.5) 
-    #     searches = get_searches()
-    #     for search in searches:
-    #         if search.id == multi_club_search.id and search.state == "finished":
-    #             still_running = False
-    #             break         
-    # search_results = {"results": search.results, "errors": search.errors} 
     search_results = multi_club_search.scrape()      
     return search_results

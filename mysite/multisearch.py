@@ -1,4 +1,3 @@
-from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from club import Club2
 
@@ -15,17 +14,11 @@ class MultiSearch:
         self.date = date
         self.initial_search_time_str = initial_search_time_str
         self.final_search_time_str = final_search_time_str
-        self.id = int((datetime.now() - datetime.utcfromtimestamp(0)).microseconds)
-        self.started_at = None
-        self.finished_at = None
-        self.processing_time = None
-        self.state = "pending"
         self.results = list()
         self.errors = list()
 
     #This function handles the parallel scraping of all the clubs in the list using ThreadPoolExecutor as threading method
     def scrape(self):
-        self.started_at = datetime.now()
         with ThreadPoolExecutor() as executor:
             future_to_club = {executor.submit(scrape_single_club, club_id, self.date, self.initial_search_time_str, self.final_search_time_str): club_id for club_id in self.club_ids}
             for future in future_to_club:
@@ -34,9 +27,6 @@ class MultiSearch:
                 else:    
                     for block in future.result()[0]:
                         self.results.append(block.__dict__)
-        self.state = "finished"
-        self.finished_at = datetime.now()
-        self.processing_time = (self.finished_at - self.started_at).total_seconds()
         json_courts = {"results": self.results, "errors": self.errors}                            
         return json_courts
 

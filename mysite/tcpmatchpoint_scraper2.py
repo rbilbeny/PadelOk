@@ -210,21 +210,6 @@ def is_current_block_overlaping_fixed_block(current_block_time_interval, fixed_b
 
 
 
-def is_current_block_a_fixed_block(current_block_time_interval, fixed_blocks):
-	for fixed_block in fixed_blocks:
-		initial_fixed_time = datetime.combine(current_block_time_interval[0].date(), datetime.strptime(fixed_block["StrHoraInicio"], "%H:%M").time())
-		final_fixed_time = datetime.combine(current_block_time_interval[0].date(), datetime.strptime(fixed_block["StrHoraFin"], "%H:%M").time())
-		if final_fixed_time  < initial_fixed_time:
-			final_fixed_time  = final_fixed_time  + timedelta(days=1)	
-		fixed_block_time_interval = (initial_fixed_time, final_fixed_time)
-
-		if fixed_block_time_interval[0] == current_block_time_interval[0] and current_block_time_interval[1] == fixed_block_time_interval[1]:
-			return True
-		
-	return False
-
-
-
 def matching_fixed_block(current_block_time_interval, fixed_blocks):
 	for fixed_block in fixed_blocks:
 		initial_fixed_time = datetime.combine(current_block_time_interval[0].date(), datetime.strptime(fixed_block["StrHoraInicio"], "%H:%M").time())
@@ -238,20 +223,8 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 				block_price = price_to_int(fixed_block["TextoAdicional"])	
 			except:
 				block_price = 0
-			return (fixed_block_time_interval[0], fixed_block_time_interval[1], block_price)
-	return ("","")
-
-
-
-def is_block_already_listed(current_block_initial_time, current_block_final_time, court_name, current_block_match_duration, block_list):
-	for block_in_list in block_list:
-		block_in_list_initial_time = datetime.strptime(block_in_list.initial_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-		block_in_list_final_time = datetime.strptime(block_in_list.final_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-
-		if block_in_list_initial_time == current_block_initial_time and block_in_list_final_time == current_block_final_time \
-		and block_in_list.court_name == court_name and block_in_list.match_duration == current_block_match_duration:
-			return True
-	return False
+			return (True, fixed_block_time_interval[0], fixed_block_time_interval[1], block_price)
+	return (False, "", "", "")
 
 
 
@@ -345,11 +318,11 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 					current_time += search_resolution
 					continue
 				#print("it's not overlaping")		
-				if is_current_block_a_fixed_block(current_block, fixed_time_blocks):
-					matching_block = matching_fixed_block(current_block, fixed_time_blocks)
-					block_initial_time = matching_block[0]
-					block_final_time = matching_block[1]
-					matching_block_price = matching_block[2]
+				is_matching = matching_fixed_block(current_block, fixed_time_blocks)
+				if is_matching[0]:
+					block_initial_time = is_matching[1]
+					block_final_time = is_matching[2]
+					matching_block_price = is_matching[3]
 					#print("it's inside fixed block")
 				else:	
 					block_initial_time = current_block[0]

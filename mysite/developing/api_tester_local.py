@@ -2,7 +2,6 @@ import json
 import sys
 import time
 from pathlib import Path
-from datetime import datetime
 
 import local_flask_app
 
@@ -58,7 +57,7 @@ def test_multi_search2():
     duration = time.time() - start_time
     clubs_list = list_text.split(", ")
     total_clubs = len(clubs_list)
-    #print(json.dumps(response, indent=4))
+    print(json.dumps(response, indent=4))
     print("Total courts found: " + str(len(response["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
