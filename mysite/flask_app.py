@@ -68,9 +68,9 @@ def handle_request_get_single_scraper2():
     try:
         with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
             lines = searches.read()
+            searches_data = json.loads(lines)
     except:
-        lines = "[]"        
-    searches_data = json.loads(lines)
+        searches_data = []
     searches = []
     for search_dict in searches_data:
         search = MultiSearch(**search_dict)
@@ -142,9 +142,9 @@ def handle_request_post_multi_scraper2():
     try:
         with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
             lines = searches.read()
+            searches_data = json.loads(lines)
     except:
-        lines = "[]" 
-    searches_data = json.loads(lines)
+        searches_data = []
     searches = []
     for search_dict in searches_data:
         search = MultiSearch(**search_dict)
