@@ -15,7 +15,7 @@ class MultiSearch:
         self.date = date
         self.initial_search_time_str = initial_search_time_str
         self.final_search_time_str = final_search_time_str
-        self.id = int((datetime.now() - datetime.utcfromtimestamp(0)).total_microseconds())
+        self.id = int((datetime.now() - datetime.utcfromtimestamp(0)).microseconds)
         self.started_at = None
         self.finished_at = None
         self.processing_time = None
