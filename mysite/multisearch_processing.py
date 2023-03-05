@@ -52,9 +52,15 @@ def run_next_search():
     searches = get_searches() 
     for search in searches:
         if search.id == current_search.id:
-            search = current_search
+            search.started_at = str(current_search.started_at)
+            search.finished_at = str(current_search.finished_at)
+            search.processing_time = current_search.processing_time
+            search.state = current_search.state
+            search.results = current_search.results
+            search.errors = current_search.errors
             break
-    save_searches(searches)        
+    save_searches(searches)
+    print(f"Finished search {current_search.id} in {current_search.processing_time} seconds, scraping a total of {len(current_search.club_ids)} clubs, with {len(current_search.results)} results.")        
 
 
 

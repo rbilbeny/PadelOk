@@ -62,5 +62,5 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
         else :
             single_club_error.error = f"Error while scraping {club.name}: no valid scraper defined on clubs.json file."             
 
-        return (single_club_results, single_club_error)     
-            
+        return (single_club_results, single_club_error)    
+
