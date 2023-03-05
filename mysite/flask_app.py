@@ -149,17 +149,18 @@ def handle_request_post_multi_scraper2():
     final_time_str = request.form.get('final_time', "") 
     clubs_ids_list = clubs_ids_text.split(", ")
     multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
-    searches = get_searches()
-    searches.append(multi_club_search)
-    save_searches(searches)
-    sleep(1)
-    still_running = True
-    while still_running:
-        sleep(0.5) 
-        searches = get_searches()
-        for search in searches:
-            if search.id == multi_club_search.id and search.state == "finished":
-                still_running = False
-                break         
-    search_results = {"results": search.results, "errors": search.errors}       
+    # searches = get_searches()
+    # searches.append(multi_club_search)
+    # save_searches(searches)
+    # sleep(1)
+    # still_running = True
+    # while still_running:
+    #     sleep(0.5) 
+    #     searches = get_searches()
+    #     for search in searches:
+    #         if search.id == multi_club_search.id and search.state == "finished":
+    #             still_running = False
+    #             break         
+    # search_results = {"results": search.results, "errors": search.errors} 
+    search_results = multi_club_search.scrape()      
     return search_results
