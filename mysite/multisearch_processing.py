@@ -3,14 +3,6 @@ from pathlib import Path
 from time import sleep
 from multisearch import MultiSearch
 
-def get_next_search(lines):
-    searches_data = json.loads(lines)
-    for search_dict in searches_data:
-        search = MultiSearch(**search_dict)
-        if search.state == "pending":
-            return search
-    return None 
-
 def get_searches():
     try:
         with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
@@ -33,7 +25,14 @@ def get_searches():
             searches.append(search)
     except:
         searches = []
-    return searches    
+    return searches  
+
+def get_next_search():
+    searches = get_searches()
+    for search in searches:
+        if search.state == "pending":
+            return search
+    return None   
 
 def save_searches(searches):
     searches_data = [search.__dict__ for search in searches]
@@ -66,7 +65,7 @@ if __name__ == "__main__":
         if len(lines) == 0:
             sleep(0.5)
         else:
-            next_search = get_next_search(lines)
+            next_search = get_next_search()
             if next_search is None:
                 sleep(0.5)
             else:
