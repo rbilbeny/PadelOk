@@ -45,7 +45,8 @@ def is_block_already_listed(current_block_initial_time, current_block_final_time
 
 
 def scraper(club, date, initial_search_time_str, final_search_time_str):
-
+	
+	date = datetime.strptime(date, "%Y-%m-%d")
 	#Defines the response variable, a list of TimeBlock objects. Handles the case where final_search_time is 00:00, which means that the search should be done until next day
 	block_list = list()
 

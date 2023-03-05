@@ -61,7 +61,6 @@ def handle_request_get_single_scraper2():
     date = str(request.args.get('date'))
     initial_time_str = str(request.args.get('initial_time', ""))
     final_time_str = str(request.args.get('final_time', ""))
-    date = datetime.strptime(date, "%Y-%m-%d")
     club_ids = [club_id]
     single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
     try:
@@ -131,7 +130,6 @@ def handle_request_post_multi_scraper2():
     date = request.form.get('date')
     initial_time_str = request.form.get('initial_time', "")
     final_time_str = request.form.get('final_time', "") 
-    date = datetime.strptime(date, "%Y-%m-%d")
     clubs_ids_list = clubs_ids_text.split(", ")
     multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
     try:
