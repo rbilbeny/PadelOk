@@ -210,7 +210,7 @@ def is_current_block_overlaping_fixed_block(current_block_time_interval, fixed_b
 
 
 
-def is_current_block_inside_fixed_block(current_block_time_interval, fixed_blocks):
+def is_current_block_a_fixed_block(current_block_time_interval, fixed_blocks):
 	for fixed_block in fixed_blocks:
 		initial_fixed_time = datetime.combine(current_block_time_interval[0].date(), datetime.strptime(fixed_block["StrHoraInicio"], "%H:%M").time())
 		final_fixed_time = datetime.combine(current_block_time_interval[0].date(), datetime.strptime(fixed_block["StrHoraFin"], "%H:%M").time())
@@ -218,7 +218,7 @@ def is_current_block_inside_fixed_block(current_block_time_interval, fixed_block
 			final_fixed_time  = final_fixed_time  + timedelta(days=1)	
 		fixed_block_time_interval = (initial_fixed_time, final_fixed_time)
 
-		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+		if fixed_block_time_interval[0] == current_block_time_interval[0] and current_block_time_interval[1] == fixed_block_time_interval[1]:
 			return True
 		
 	return False
@@ -233,7 +233,7 @@ def matching_fixed_block(current_block_time_interval, fixed_blocks):
 			final_fixed_time  = final_fixed_time  + timedelta(days=1)	
 		fixed_block_time_interval = (initial_fixed_time, final_fixed_time)
 
-		if fixed_block_time_interval[0] <= current_block_time_interval[0] and current_block_time_interval[1] <= fixed_block_time_interval[1]:
+		if fixed_block_time_interval[0] == current_block_time_interval[0] and current_block_time_interval[1] == fixed_block_time_interval[1]:
 			try:
 				block_price = price_to_int(fixed_block["TextoAdicional"])	
 			except:
@@ -294,19 +294,26 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 	club_ = calendar["d"]["Nombre"]
 	#print(club_)
 	courts = calendar["d"]["Columnas"]
-	initial_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M").time())
-	final_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M").time())
+	club_initial_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraInicio"], "%H:%M").time())
+	club_final_search_time = datetime.combine(date, datetime.strptime(calendar["d"]["StrHoraFin"], "%H:%M").time())
+	#If the final_search_time is past midnight, the final time is set to the same time the next day.
+	if club_final_search_time < club_initial_search_time:
+		club_final_search_time  = club_final_search_time  + timedelta(days=1)		
 
 	#If you want to limit the search time interval, you can do it here.
 	if initial_search_time_str != "":
 		initial_search_time = datetime.combine(date, datetime.strptime(initial_search_time_str, "%H:%M").time())
-
 	if final_search_time_str != "":
 		final_search_time = datetime.combine(date, datetime.strptime(final_search_time_str, "%H:%M").time())	
-
 	#If the final_search_time is past midnight, the final time is set to the same time the next day.
-	if final_search_time < initial_search_time:
-		final_search_time  = final_search_time  + timedelta(days=1)			
+	if initial_search_time_str != "" and final_search_time_str != "" and final_search_time < initial_search_time:
+		final_search_time  = final_search_time  + timedelta(days=1)		
+
+	if (initial_search_time_str != "" and initial_search_time < club_initial_search_time) or initial_search_time_str == "":
+		initial_search_time = club_initial_search_time
+	if (final_search_time_str != "" and final_search_time > club_final_search_time) or final_search_time_str == "":
+		final_search_time = club_final_search_time		
+
 
 	#print("initial_search_time:", initial_search_time)	
 	#print("final_search_time:", final_search_time)		
@@ -338,7 +345,7 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 					current_time += search_resolution
 					continue
 				#print("it's not overlaping")		
-				if is_current_block_inside_fixed_block(current_block, fixed_time_blocks):
+				if is_current_block_a_fixed_block(current_block, fixed_time_blocks):
 					matching_block = matching_fixed_block(current_block, fixed_time_blocks)
 					block_initial_time = matching_block[0]
 					block_final_time = matching_block[1]
@@ -347,10 +354,6 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 				else:	
 					block_initial_time = current_block[0]
 					block_final_time = current_block[1]
-				if is_block_already_listed(block_initial_time, block_final_time, court_name, match_duration, block_list):
-					current_time += search_resolution
-					continue
-				#print("Exact same block it's not already in the list, SO IT'S BEEN SAVED!")
 				try :
 					block_price = matching_block_price
 					matching_block_price = 0

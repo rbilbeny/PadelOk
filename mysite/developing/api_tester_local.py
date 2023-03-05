@@ -31,7 +31,7 @@ def test_club_search():
 
 # Version2, future development  
 def test_club_search2(): 
-    response = local_flask_app.handle_request_get_single_scraper2("1669903818955x480922479948817660", "2023-03-06", "", "")
+    response = local_flask_app.handle_request_get_single_scraper2("1669904088780x898504369661313000", "2023-03-06", "16:00", "19:00")
     print(json.dumps(response, indent=4))
     print("Total courts found: " + str(len(response["results"])))
 
@@ -58,20 +58,12 @@ def test_multi_search2():
     duration = time.time() - start_time
     clubs_list = list_text.split(", ")
     total_clubs = len(clubs_list)
-    print(json.dumps(response, indent=4))
+    #print(json.dumps(response, indent=4))
     print("Total courts found: " + str(len(response["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds") 
 
 
-def test_file():
-    with open(f"{str(Path(__file__).parent.parent)}/multisearch_jobs.json", 'r') as jobs:
-        pending_jobs = jobs.readlines()
-        
-    print(len(pending_jobs))    
-  
-
-
 
 #currently being tested:
-test_file()
+test_multi_search2()
 

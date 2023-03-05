@@ -32,18 +32,6 @@ def get_court_size(court_name):
 
 
 
-def is_block_already_listed(current_block_initial_time, current_block_final_time, court_name, current_block_match_duration, block_list):
-	for block_in_list in block_list:
-		block_in_list_initial_time = datetime.strptime(block_in_list.initial_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-		block_in_list_final_time = datetime.strptime(block_in_list.final_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-
-		if block_in_list_initial_time == current_block_initial_time and block_in_list_final_time == current_block_final_time \
-		and block_in_list.court_name == court_name and block_in_list.match_duration == current_block_match_duration:
-			return True
-	return False
-
-
-
 def scraper(club, date, initial_search_time_str, final_search_time_str):
 	
 	date = datetime.strptime(date, "%Y-%m-%d")
@@ -96,9 +84,6 @@ def scraper(club, date, initial_search_time_str, final_search_time_str):
 			for time_slot in alternative_slot["timeslots"]:	
 				court_name = time_slot["courtText"]
 				#print(court_name, block_price)
-				if is_block_already_listed(block_initial_time, block_final_time, court_name, match_duration, block_list):
-					continue
-				#print("Exact same block it's not already in the list")
 				block_price = time_slot["priceInfo"]["amount"]
 				new_block = TimeBlock2(club.id, block_initial_time, block_final_time, court_name, match_duration, block_price, get_court_size(court_name))	
 				block_list.append(new_block)
