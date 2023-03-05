@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from search import ClubSearch
 from multisearch import MultiSearch
-from club import Club, Club2
+from club import Club
 
 #RECEIVES CLUB DATABASE ENDPOINT
 def handle_request_post_clubs(input_text):
@@ -43,9 +43,8 @@ def handle_request_get_single_scraper(search_type, club_id, date, inital_time, f
 # Version2, future development 
 def handle_request_get_single_scraper2(club_id, date, initial_time_str, final_time_str): 
     date = datetime.strptime(date, "%Y-%m-%d")
-    club = Club2(club_id)
-    clubs = [club]
-    single_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    club_ids = [club_id]
+    single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
     search_results = single_club_search.scrape()   
     return search_results
 
@@ -77,11 +76,7 @@ def handle_request_post_multi_scraper1(search_type, clubs_ids, date, inital_time
 def handle_request_post_multi_scraper2(clubs_ids, date, initial_time_str, final_time_str): 
     date = datetime.strptime(date, "%Y-%m-%d")
     clubs_ids_list = clubs_ids.split(", ")
-    clubs = list()
-    for club_id in clubs_ids_list:
-        club = Club2(club_id)
-        clubs.append(club)
-    multi_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
     search_results = multi_club_search.scrape()
     return search_results
 

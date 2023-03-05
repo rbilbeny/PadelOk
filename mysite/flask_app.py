@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent))
 from search import ClubSearch
 from multisearch import MultiSearch
-from club import Club, Club2
+from club import Club
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
@@ -62,9 +62,8 @@ def handle_request_get_single_scraper2():
     initial_time_str = str(request.args.get('initial_time', ""))
     final_time_str = str(request.args.get('final_time', ""))
     date = datetime.strptime(date, "%Y-%m-%d")
-    club = Club2(club_id)
-    clubs = [club]
-    single_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    club_ids = [club_id]
+    single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
     try:
         with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
             lines = searches.read()
@@ -134,11 +133,7 @@ def handle_request_post_multi_scraper2():
     final_time_str = request.form.get('final_time', "") 
     date = datetime.strptime(date, "%Y-%m-%d")
     clubs_ids_list = clubs_ids_text.split(", ")
-    clubs = list()
-    for club_id in clubs_ids_list:
-        club = Club2(club_id)
-        clubs.append(club)
-    multi_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
     try:
         with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
             lines = searches.read()
