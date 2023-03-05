@@ -104,7 +104,7 @@ def handle_request_get_single_scraper2():
         sleep(0.5) 
         searches = get_searches()
         for search in searches:
-            if search.id == single_club_search.id and search.status == "finished":
+            if search.id == single_club_search.id and search.state == "finished":
                 still_running = False
                 break         
     search_results = {"results": search.results, "errors": search.errors}       
@@ -158,7 +158,7 @@ def handle_request_post_multi_scraper2():
         sleep(0.5) 
         searches = get_searches()
         for search in searches:
-            if search.id == multi_club_search.id and search.status == "finished":
+            if search.id == multi_club_search.id and search.state == "finished":
                 still_running = False
                 break         
     search_results = {"results": search.results, "errors": search.errors}       
