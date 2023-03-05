@@ -13,6 +13,38 @@ from club import Club
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
 
+def get_searches():
+    try:
+        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
+            lines = searches.read()
+        searches_data = json.loads(lines)
+        searches = []
+        for search_dict in searches_data:
+            search = MultiSearch("","","","")
+            search.club_ids = search_dict["club_ids"]
+            search.date = search_dict["date"]
+            search.initial_search_time_str = search_dict["initial_search_time_str"]
+            search.final_search_time_str = search_dict["final_search_time_str"]
+            search.id = search_dict["id"]
+            search.started_at = search_dict["started_at"]
+            search.finished_at = search_dict["finished_at"]
+            search.processing_time = search_dict["processing_time"]
+            search.state = search_dict["state"]
+            search.results = search_dict["results"]
+            search.errors = search_dict["errors"]
+            searches.append(search)
+    except:
+        searches = []
+    return searches    
+
+def save_searches(searches):
+    searches_data = [search.__dict__ for search in searches]
+    searches_json = json.dumps(searches_data)
+    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'w') as searches:
+        searches.write(searches_json)
+
+
+
 #RECEIVES CLUB DATABASE ENDPOINT
 @app.route('/post_clubs', methods=['POST'])
 def handle_request_post_clubs():
@@ -63,33 +95,18 @@ def handle_request_get_single_scraper2():
     final_time_str = str(request.args.get('final_time', ""))
     club_ids = [club_id]
     single_club_search = MultiSearch(club_ids, date, initial_time_str, final_time_str)
-    try:
-        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-            lines = searches.read()
-            searches_data = json.loads(lines)
-    except:
-        searches_data = []
-    searches = []
-    for search_dict in searches_data:
-        search = MultiSearch(**search_dict)
-        searches.append(search)
+    searches = get_searches()
     searches.append(single_club_search)
-    searches_data = [search.__dict__ for search in searches]
-    searches_json = json.dumps(searches_data)
-    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'w') as searches:
-        searches.write(searches_json)
-    sleep(2)
-    while True:
-        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-            lines = searches.read()
-        searches_data = json.loads(lines)
-        for search_dict in searches_data:
-            if search_dict["id"] == single_club_search.id:
-                search = MultiSearch(**search_dict)
-                break
-        if search.status == "finished":
-            break
-        sleep(1)         
+    save_searches(searches)
+    sleep(1)
+    still_running = True
+    while still_running:
+        sleep(0.5) 
+        searches = get_searches()
+        for search in searches:
+            if search.id == single_club_search.id and search.status == "finished":
+                still_running = False
+                break         
     search_results = {"results": search.results, "errors": search.errors}       
     return search_results
 
@@ -132,32 +149,17 @@ def handle_request_post_multi_scraper2():
     final_time_str = request.form.get('final_time', "") 
     clubs_ids_list = clubs_ids_text.split(", ")
     multi_club_search = MultiSearch(clubs_ids_list, date, initial_time_str, final_time_str)
-    try:
-        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-            lines = searches.read()
-            searches_data = json.loads(lines)
-    except:
-        searches_data = []
-    searches = []
-    for search_dict in searches_data:
-        search = MultiSearch(**search_dict)
-        searches.append(search)
+    searches = get_searches()
     searches.append(multi_club_search)
-    searches_data = [search.__dict__ for search in searches]
-    searches_json = json.dumps(searches_data)
-    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'w') as searches:
-        searches.write(searches_json)
-    sleep(2)
-    while True:
-        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-            lines = searches.read()
-        searches_data = json.loads(lines)
-        for search_dict in searches_data:
-            if search_dict["id"] == multi_club_search.id:
-                search = MultiSearch(**search_dict)
-                break
-        if search.status == "finished":
-            break
-        sleep(1)         
-    search_results = {"results": search.results, "errors": search.errors}
-    return search_results    
+    save_searches(searches)
+    sleep(1)
+    still_running = True
+    while still_running:
+        sleep(0.5) 
+        searches = get_searches()
+        for search in searches:
+            if search.id == multi_club_search.id and search.status == "finished":
+                still_running = False
+                break         
+    search_results = {"results": search.results, "errors": search.errors}       
+    return search_results
