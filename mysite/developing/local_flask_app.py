@@ -45,8 +45,8 @@ def handle_request_get_single_scraper2(club_id, date, initial_time_str, final_ti
     date = datetime.strptime(date, "%Y-%m-%d")
     club = Club2(club_id)
     clubs = [club]
-    single_club_search = MultiSearch(clubs, date)
-    search_results = single_club_search.scrape(initial_time_str, final_time_str)   
+    single_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    search_results = single_club_search.scrape()   
     return search_results
 
 
@@ -81,8 +81,8 @@ def handle_request_post_multi_scraper2(clubs_ids, date, initial_time_str, final_
     for club_id in clubs_ids_list:
         club = Club2(club_id)
         clubs.append(club)
-    multi_club_search = MultiSearch(clubs, date)
-    search_results = multi_club_search.scrape(initial_time_str, final_time_str)
+    multi_club_search = MultiSearch(clubs, date, initial_time_str, final_time_str)
+    search_results = multi_club_search.scrape()
     return search_results
 
 

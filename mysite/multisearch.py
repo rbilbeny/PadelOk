@@ -1,3 +1,4 @@
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
 from tcpmatchpoint_scraper2 import scraper as tcp_scraper2
@@ -8,22 +9,33 @@ class MultiSearch:
     Creates a Search that defines the scope of the court web scrapping for N clubs.
     """
 
-    def __init__(self, clubs, date):
+    def __init__(self, clubs, date, initial_search_time_str, final_search_time_str):
         self.clubs = clubs
         self.date = date
+        self.initial_search_time_str = initial_search_time_str
+        self.final_search_time_str = final_search_time_str
+        self.id = datetime.now().microsecond
+        self.started_at = None
+        self.finished_at = None
+        self.processing_time = None
+        self.state = "pending"
         self.results = list()
         self.errors = list()
 
     #This function handles the parallel scraping of all the clubs in the list using ThreadPoolExecutor as threading method
-    def scrape(self, initial_search_time_str, final_search_time_str):
+    def scrape(self):
+        self.started_at = datetime.now()
         with ThreadPoolExecutor() as executor:
-            future_to_club = {executor.submit(scrape_single_club, club, self.date, initial_search_time_str, final_search_time_str): club for club in self.clubs}
+            future_to_club = {executor.submit(scrape_single_club, club, self.date, self.initial_search_time_str, self.final_search_time_str): club for club in self.clubs}
             for future in future_to_club:
                 if future.result()[1] is not None:
                     self.errors.append(future.result()[1])
                 else:    
                     for block in future.result()[0]:
                         self.results.append(block.__dict__)
+        self.state = "finished"
+        self.finished_at = datetime.now()
+        self.processing_time = (self.finished_at - self.started_at).total_seconds()
         json_courts = {"results": self.results, "errors": self.errors}                            
         return json_courts
 
