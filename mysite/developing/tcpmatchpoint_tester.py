@@ -1,17 +1,15 @@
 
 import json
 import sys
-from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-from time_block import TimeBlock
-from tcpmatchpoint_scraper import scraper
-from club import Club
+from tcpmatchpoint_scraper2 import scraper
+from club import Club2
 
 
-date = "23/2/2022"
-club_id = "1677159808890x906999172264078800" #pie andino
+date = "2023-03-07"
+club_id = "1677078312761x183019328151117000" #Zarhi Pade
 #club_id = "1669903818955x480922479948817660" #estoril
 inital_search_time = "13:00"
 final_search_time = "15:00"

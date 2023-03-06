@@ -24,13 +24,13 @@ def test_post_clubs():
 #TESTING SINGLE CLUB SCRAPING
 # Version1, today in production    
 def test_club_search(): 
-    response = local_flask_app.handle_request_get_single_scraper("all_courts", "1671573721228x274856123451891360", "28/2/2023", "18:00", "23:30", 60)
+    response = local_flask_app.handle_request_get_single_scraper("all_courts", "1677077836592x120441959369631760", "28/2/2023", "18:00", "23:30", 60)
     print(response)
     print("Total courts found: " + str(len(json.loads(response)["results"])))
 
 # Version2, future development  
 def test_club_search2(): 
-    response = local_flask_app.handle_request_get_single_scraper2("1669904088780x898504369661313000", "2023-03-06", "16:00", "19:00")
+    response = local_flask_app.handle_request_get_single_scraper2("1677078312761x183019328151117000", "2023-03-07", "", "")
     print(json.dumps(response, indent=4))
     print("Total courts found: " + str(len(response["results"])))
 
@@ -64,5 +64,5 @@ def test_multi_search2():
 
 
 #currently being tested:
-test_multi_search2()
+test_club_search2()
 
