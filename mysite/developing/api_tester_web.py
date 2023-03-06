@@ -68,6 +68,7 @@ def test_multi_search2():
     duration = time.time() - start_time
     clubs_list = list_text.split(", ")
     total_clubs = len(clubs_list)
+    print(response)
     print(json.dumps(response.json(), indent=4))
     print("Total courts found: " + str(len(response.json()["results"])))
     print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")
