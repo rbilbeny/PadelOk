@@ -36,7 +36,7 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
         single_club_results = list()
         single_club_error = None
         club = Club2(club_id)
-        if club.scraper_available == "No":
+        if not club.scraper_available:
             single_club_error = f"Error while scraping {club.name}: club is defined as not available for scraping."
             return (single_club_results, single_club_error)
         
