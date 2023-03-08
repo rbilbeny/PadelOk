@@ -1,47 +1,12 @@
 from flask import Flask, request
-import json
 import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent))
-from search import ClubSearch
 from multisearch import MultiSearch
-from club import Club
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
-
-def get_searches():
-    try:
-        with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'r') as searches:
-            lines = searches.read()
-        searches_data = json.loads(lines)
-        searches = []
-        for search_dict in searches_data:
-            search = MultiSearch("","","","")
-            search.club_ids = search_dict["club_ids"]
-            search.date = search_dict["date"]
-            search.initial_search_time_str = search_dict["initial_search_time_str"]
-            search.final_search_time_str = search_dict["final_search_time_str"]
-            search.id = search_dict["id"]
-            search.started_at = search_dict["started_at"]
-            search.finished_at = search_dict["finished_at"]
-            search.processing_time = search_dict["processing_time"]
-            search.state = search_dict["state"]
-            search.results = search_dict["results"]
-            search.errors = search_dict["errors"]
-            searches.append(search)
-    except:
-        searches = []
-    return searches    
-
-def save_searches(searches):
-    searches_data = [search.__dict__ for search in searches]
-    searches_json = json.dumps(searches_data)
-    with open(f"{str(Path(__file__).parent)}/multisearch_jobs.json", 'w') as searches:
-        searches.write(searches_json)
-
-
 
 #RECEIVES CLUB DATABASE ENDPOINT
 @app.route('/post_clubs', methods=['POST'])
@@ -59,31 +24,6 @@ def handle_request_post_clubs():
 
 
 #SCRAPES ONE CLUB ENDPOINT
-# Version1, deprecated
-@app.route('/get_single_scraper', methods=['GET'])
-def handle_request_get_single_scraper():
-    search_type = str(request.args.get('search_type'))
-    club_id  = str(request.args.get('club_id'))
-    search_date = str(request.args.get('date'))
-    inital_time = str(request.args.get('initial_time'))
-    final_time = str(request.args.get('final_time'))
-    match_duration = int(request.args.get('match_duration'))
-    with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
-        lines = clubs.readlines()
-        line = lines[0]
-    club = Club(line, club_id)
-    single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
-    single_club_search.scrape()   
-    search_result_list = []
-    search_error_list = []
-    for block in single_club_search.result:
-        search_result_list.append(block.__dict__)
-    if single_club_search.error != None:
-        search_error_list.append({"error_message": single_club_search.error})
-    json_courts = {"results": search_result_list, "errors": search_error_list}
-    response = json.dumps(json_courts, indent=4)
-    return response
-
 # Version2, today in production 
 @app.route('/get_single_scraper2', methods=['GET'])
 def handle_request_get_single_scraper2():
@@ -99,33 +39,6 @@ def handle_request_get_single_scraper2():
 
 
 #SCRAPES MULTIPLE CLUB ENDPOINT
-# Version1, deprecated
-@app.route('/post_multi_scraper1', methods=['POST'])
-def handle_request_post_multi_scraper1():
-    search_type = request.form.get('search_type')
-    clubs_ids_text = request.form.get('clubs_ids')
-    search_date = request.form.get('date')
-    inital_time = request.form.get('initial_time')
-    final_time = request.form.get('final_time')
-    match_duration = int(request.form.get('match_duration'))
-    with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as clubs:
-        lines = clubs.readlines()
-        line = lines[0]
-    clubs_ids_list = clubs_ids_text.split(", ")
-    multisearch_result_list = list()
-    search_error_list = []
-    for club_id in clubs_ids_list:
-        club = Club(line, club_id)
-        single_club_search = ClubSearch(search_type, club, search_date, inital_time, final_time, match_duration)
-        single_club_search.scrape()
-        for block in single_club_search.result:
-            multisearch_result_list.append(block.__dict__) 
-        if single_club_search.error != None:
-            search_error_list.append({"error_message": single_club_search.error})    
-    json_courts = {"results": multisearch_result_list, "errors": search_error_list}
-    response = json.dumps(json_courts, indent=4)
-    return response
-
 # Version2, today in production
 @app.route('/post_multi_scraper2', methods=['POST'])
 def handle_request_post_multi_scraper2():

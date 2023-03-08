@@ -5,7 +5,6 @@ import time
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
-
 json_path =  str(Path(__file__).parent.parent) + "/clubs.json"
 
 #TESTING ALL CLUB'S UPLOAD
@@ -22,19 +21,10 @@ def test_post_clubs():
 
 
 #TESTING SINGLE CLUB SCRAPING
-# Version1, today in production 
-def test_club_search():
-    URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper"
-    params = {"search_type" : "one_court_per_time_block", "club_id" : "1676586377583x836928922273005800", "date" : "17/2/2023", "initial_time" : "11:00", "final_time" : "00:00", "match_duration" : 190}
-    response = requests.get(URL, params=params)
-    print(response)
-    print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json()["results"]))) 
-
-# Version2, future development
+# Version2, today in production 
 def test_club_search2():
     URL = "http://rodrigobilbeny.pythonanywhere.com/get_single_scraper2"
-    params = {"club_id" : "1669903818955x480922479948817660", "date" : "2023-03-06"}
+    params = {"club_id" : "1671575899691x174113495399525380", "date" : "2023-03-08"}
     response = requests.get(URL, params=params)
     print(response)
     print(json.dumps(response.json(), indent=4))
@@ -42,27 +32,12 @@ def test_club_search2():
 
 
 
- #TESTING MULTIPLE CLUB SCRAPING 
- # Version1, today in production    
-def test_multi_search1(): 
-    list_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200, 1671575242087x935644432011197400, 1671575436576x912922488390485900, 1671575576733x939740595137469000, 1671575703240x964951687272276500, 1671575899691x174113495399525380, 1671575966750x889989581817634000, 1671576404514x979354888909678200, 1671576585532x934079551292597900, 1672937071915x276360887553703800, 1672937321331x524913942331468560, 1673304980276x955532294115819500, 1673413421696x591168331745853400, 1673445939619x571277648445580560, 1673446354677x607823441479734800, 1673466908942x370412396042780700, 1674148309003x590988461942767600, 1677077836592x120441959369631760, 1677078312761x183019328151117000"
-    URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper1"
-    data = {"search_type" : "all_courts", "clubs_ids" : list_text, "date" : "4/3/2023", "initial_time" : "07:00", "final_time" : "24:00", "match_duration" : 60}
-    start_time = time.time()
-    response = requests.post(URL, data=data)
-    duration = time.time() - start_time
-    clubs_list = list_text.split(", ")
-    total_clubs = len(clubs_list)
-    print(response)
-    print(json.dumps(response.json(), indent=4))
-    print("Total courts found: " + str(len(response.json()["results"])))
-    print(f"Scraped courts from {total_clubs} clubs in {duration} seconds")     
-
-# Version2, future development
+ #TESTING MULTIPLE CLUB SCRAPING   
+# Version2, today in production
 def test_multi_search2(): 
     list_text = "1669903818955x480922479948817660, 1669903930944x273874201170327460, 1669904088780x898504369661313000, 1671573721228x274856123451891360, 1671574668076x697672856529101700, 1671574796639x371045720000991360, 1671575069499x815302630011782700, 1671575146642x673635785389879200, 1671575242087x935644432011197400, 1671575436576x912922488390485900, 1671575576733x939740595137469000, 1671575703240x964951687272276500, 1671575899691x174113495399525380, 1671575966750x889989581817634000, 1671576404514x979354888909678200, 1671576585532x934079551292597900, 1672937071915x276360887553703800, 1672937321331x524913942331468560, 1673304980276x955532294115819500, 1673413421696x591168331745853400, 1673445939619x571277648445580560, 1673446354677x607823441479734800, 1673466908942x370412396042780700, 1674148309003x590988461942767600, 1677077836592x120441959369631760, 1677078312761x183019328151117000"
     URL = "http://rodrigobilbeny.pythonanywhere.com/post_multi_scraper2"
-    data = {"clubs_ids" : list_text, "date" : "2023-03-08"}
+    data = {"clubs_ids" : list_text, "date" : "2023-03-11"}
     start_time = time.time()
     response = requests.post(URL, data=data)
     duration = time.time() - start_time
@@ -76,5 +51,4 @@ def test_multi_search2():
 
 
 #currently being tested:
-test_multi_search2()
-
+test_club_search2()

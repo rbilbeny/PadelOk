@@ -36,6 +36,9 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
         single_club_results = list()
         single_club_error = None
         club = Club2(club_id)
+        if club.scraper_available == "No":
+            single_club_error = f"Error while scraping {club.name}: club is defined as not available for scraping."
+            return (single_club_results, single_club_error)
         
         if club.web_scraper == "tcpmatchpoint":
             try: 
@@ -52,5 +55,5 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
         else :
             single_club_error = f"Error while scraping {club.name}: no valid scraper defined on clubs.json file."             
 
-        return (single_club_results, single_club_error)    
+        return (single_club_results, single_club_error)
 
