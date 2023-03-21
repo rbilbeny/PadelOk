@@ -9,6 +9,10 @@ from padelok_secure import PADELOK_BUBBLE_KEY
 sys.path.append(str(Path(__file__).parent))
 from multisearch import MultiSearch
 
+json_dir = Path(__file__).parent
+json_filename = "clubs.json"
+json_path = json_dir / json_filename
+
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB
@@ -33,9 +37,9 @@ def verify_token(token):
 def handle_request_post_clubs():
     input_text = str(request.form.get('clubs'))
     input_text = input_text.replace('\\', "")
-    with open("/home/rodrigobilbeny/mysite/clubs.json", 'w') as clubs:
+    with open(json_path, 'w') as clubs:
         clubs.write(input_text)
-    with open("/home/rodrigobilbeny/mysite/clubs.json", 'r') as updated_clubs:
+    with open(json_path, 'r') as updated_clubs:
         lines = updated_clubs.readlines()
         line = lines[0]
     json_clubs = line

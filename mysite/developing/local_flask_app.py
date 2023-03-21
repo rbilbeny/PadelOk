@@ -4,12 +4,16 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from multisearch import MultiSearch
 
+json_dir = Path(__file__).parent
+json_filename = "clubs.json"
+json_path = json_dir / json_filename
+
 #RECEIVES CLUB DATABASE ENDPOINT
 def handle_request_post_clubs(input_text):
     input_text = input_text.replace('\\', "")
-    with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'w') as clubs:
+    with open(json_path, 'w') as clubs:
         clubs.write(input_text)
-    with open("/Users/rodrigobilbeny/Documents/GitHub/PadelOk/mysite/clubs.json", 'r') as updated_clubs:
+    with open(json_path, 'r') as updated_clubs:
         lines = updated_clubs.readlines()
         line = lines[0]    
     json_clubs = line
