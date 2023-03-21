@@ -8,11 +8,23 @@ from time_block import TimeBlock2
 
 def get_calendar(sport_id, club_url_id, date, match_duration):
 
+	headers = {
+		"accept": 'application/json, text/plain, */*',
+		"accept-encoding": 'gzip, deflate, br',
+		"accept-language": 'es-CL',
+		"app-id": 'easycancha',
+		"app-os": 'web',
+		"country": 'CL',
+		"referer":f'https://www.easycancha.com/book/clubs/{club_url_id}/sports',
+		"user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+		"x-requested-with": 'XMLHttpRequest'
+		}
+
 	url = f"https://www.easycancha.com/api/sports/{sport_id}/clubs/{club_url_id}/timeslots?date={date}&timespan={match_duration}"
 	#print(url)
 	while True:
 		try:
-			response = requests.get(url)
+			response = requests.get(url, headers=headers)
 			if response.status_code==200:
 				break
 		except:

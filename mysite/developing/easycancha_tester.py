@@ -8,14 +8,14 @@ import requests
 
 
 #YOU CAN SIMPLY IGNORE THIS PART
-# sys.path.append(str(Path(__file__).parent.parent))
-# from club import Club2
-# date = "2023-03-07"
-# club_id = "1672937071915x276360887553703800" #Youtopia
-# initial_search_time_str = "13:00"
-# final_search_time_str = "15:00"     
-# club = Club2(club_id)
-# #single_club_search = scraper(club, date, initial_search_time_str, final_search_time_str)
+sys.path.append(str(Path(__file__).parent.parent))
+from club import Club2
+date = "2023-03-17"
+club_id = "1672937071915x276360887553703800" #Youtopia
+initial_search_time_str = "13:00"
+final_search_time_str = "15:00"     
+club = Club2(club_id)
+#single_club_search = scraper(club, date, initial_search_time_str, final_search_time_str)
 
 match_duration = 60
 print(club.name)
@@ -64,7 +64,7 @@ headers = {
 		'app-os': 'web',
         'cookie' : cookie,
         'country': 'CL',
-        'refer': f'https://www.easycancha.com/book/clubs/{club.url_id}/sports',
+        'refer': f'https://www.easycancha.com/book/clubs/{club.url_id}/filter',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': 'macOS',
         'sec-fetch-dest': "empty",
