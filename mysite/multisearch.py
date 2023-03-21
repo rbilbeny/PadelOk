@@ -46,11 +46,11 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
             except:
                 single_club_error = f"Error while scraping {club.name} with {club.web_scraper}."
 
-        # elif club.web_scraper == "easycancha":
-        #     try: 
-        #         single_club_results = easy_scraper2(club, date, initial_search_time_str, final_search_time_str)
-        #     except:
-        #         single_club_error= f"Error while scraping {club.name} with {club.web_scraper}."
+        elif club.web_scraper == "easycancha":
+            try: 
+                single_club_results = easy_scraper2(club, date, initial_search_time_str, final_search_time_str)
+            except:
+                single_club_error= f"Error while scraping {club.name} with {club.web_scraper}."
 
         else :
             single_club_error = f"Error while scraping {club.name}: no valid scraper defined on clubs.json file."             

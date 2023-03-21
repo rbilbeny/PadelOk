@@ -1,12 +1,20 @@
 import requests
 import json
 import re
+import time
+import sys
+from pathlib import Path
 from datetime import datetime, timedelta
 
 from time_block import TimeBlock2
 
-PROXY_ACTIVE = False
-API_KEY = ""
+sys.path.append(str(Path(__file__).parent.parent.parent / 'Security'))
+from padelok_secure import SCRAPESTACK_KEY
+
+PROXY_ACTIVE = True
+API_KEY = SCRAPESTACK_KEY
+MAX_TRIES = 8
+
 login_data = {
     				'email': 'rodrigobilbeny@gmail.com',
     				'password': 'yzy1QUY-nrv.khp!jbz'
@@ -40,16 +48,33 @@ def get_session(calendar_url):
 		'Upgrade-Insecure-Requests': '1',
 		'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
 	}
-
+	url = calendar_url
+	tries = 0
 	while True:
 		try:
 			if PROXY_ACTIVE:
-				response = requests.get("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+calendar_url, headers=headers, verify=False)
+				params = {
+					"access_key": API_KEY,
+					"url": url,
+					"keep_headers": 1,
+					"proxy_location": "cl"
+				}
+				response = requests.get("https://api.scrapestack.com/scrape", params=params,  headers=headers, verify=False)
 			else:
-				response = requests.get(calendar_url, headers=headers, verify=False)
+				response = requests.get(url, headers=headers, verify=False)
 			if response.status_code==200:
 				break
+			else:
+				tries = tries + 1
+				if tries > MAX_TRIES:
+					break
+				time.sleep(0.1)
+
 		except:
+			tries = tries + 1
+			if tries > MAX_TRIES:
+				break
+			time.sleep(0.1)
 			pass
 
 	html=response.text
@@ -94,16 +119,33 @@ def get_id(id_url,session_id,cheat_code):
 		'key': cheat_code
 	}
 
+	url = id_url
+	tries = 0
 	while True:
 		try:
 			if PROXY_ACTIVE:
-				response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+id_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+				params = {
+					"access_key": API_KEY,
+					"url": url,
+					"keep_headers": 1,
+					"proxy_location": "cl"
+				}
+				response = requests.post("https://api.scrapestack.com/scrape", params=params, headers=headers, cookies=cookies, json=json_data, verify=False)
 			else:
-				response = requests.post(id_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+				response = requests.post(url,cookies=cookies,headers=headers,json=json_data,verify=False)
 			if response.status_code==200:
 				break
+			else:
+				tries = tries + 1
+				if tries > MAX_TRIES:
+					break
+				time.sleep(0.1)
 
 		except:
+			tries = tries + 1
+			if tries > MAX_TRIES:
+				break
+			time.sleep(0.1)
 			pass
 
 	id=response.json()["d"][0]["Id"]
@@ -144,11 +186,34 @@ def get_calendar(API_url,calendar_url,session_id,cheat_code,id,date):
 		'p': cheat_code,
 		'key': cheat_code
 	}
-
-	if PROXY_ACTIVE:
-		response = requests.post("https://api.scrapestack.com/scrape?access_key="+API_KEY+"&render_js=0&url="+API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
-	else:
-		response = requests.post(API_url,cookies=cookies,headers=headers,json=json_data,verify=False)
+	url = API_url
+	tries = 0
+	while True:
+		try:
+			if PROXY_ACTIVE:
+				params = {
+					"access_key": API_KEY,
+					"url": url,
+					"keep_headers": 1,
+					"proxy_location": "cl"
+				}
+				response = requests.post("https://api.scrapestack.com/scrape", params=params, headers=headers, cookies=cookies, json=json_data, verify=False)
+			else:	
+				response = requests.post(url,cookies=cookies,headers=headers,json=json_data,verify=False)
+			if response.status_code==200:
+				break
+			else:
+				tries = tries + 1
+				if tries > MAX_TRIES:
+					break
+				time.sleep(0.1)
+		
+		except:
+			tries = tries + 1
+			if tries > MAX_TRIES:
+				break
+			time.sleep(0.1) 
+			pass
 
 	calendar=response.json()
 

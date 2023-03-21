@@ -1,9 +1,19 @@
 import requests
 import json
 import re
+import time
+import sys
+from pathlib import Path
 from datetime import datetime, timedelta
 
 from time_block import TimeBlock2
+
+sys.path.append(str(Path(__file__).parent.parent.parent / 'Security'))
+from padelok_secure import SCRAPESTACK_KEY
+
+PROXY_ACTIVE = True
+API_KEY = SCRAPESTACK_KEY
+MAX_TRIES = 8
 
 
 def get_calendar(sport_id, club_url_id, date, match_duration):
@@ -15,19 +25,41 @@ def get_calendar(sport_id, club_url_id, date, match_duration):
 		"app-id": 'easycancha',
 		"app-os": 'web',
 		"country": 'CL',
-		"referer":f'https://www.easycancha.com/book/clubs/{club_url_id}/sports',
+		"referer":f'https://www.easycancha.com/book/clubs/{club_url_id}/filter',
 		"user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
 		"x-requested-with": 'XMLHttpRequest'
 		}
 
-	url = f"https://www.easycancha.com/api/sports/{sport_id}/clubs/{club_url_id}/timeslots?date={date}&timespan={match_duration}"
+	now = datetime.now().strftime("%H:%M:%S")
+	url = f"https://www.easycancha.com/api/sports/{sport_id}/clubs/{club_url_id}/timeslots?date={date}&time={now}&timespan={match_duration}"
 	#print(url)
+
+	tries = 0
 	while True:
 		try:
-			response = requests.get(url, headers=headers)
+			if PROXY_ACTIVE:
+				params = {
+					"access_key": API_KEY,
+					"url": url,
+					"keep_headers": 1,
+					"proxy_location": "cl"
+				}
+				response = requests.get("https://api.scrapestack.com/scrape", params=params, headers=headers, verify=False)
+			else:
+				response = requests.get(url, headers=headers, verify=False)
 			if response.status_code==200:
 				break
+			else:
+				tries = tries + 1
+				if tries > MAX_TRIES:
+					break
+				time.sleep(0.1)
+
 		except:
+			tries = tries + 1
+			if tries > MAX_TRIES:
+				break
+			time.sleep(0.1)
 			pass
 
 	return response.json()	
