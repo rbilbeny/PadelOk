@@ -1,8 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor
 from club import Club2
 
-from tcpmatchpoint_scraper2 import scraper as tcp_scraper2
-from easycancha_scraper2 import scraper as easy_scraper2
+from type1_scraper import scraper as type1_scraper
+from type2_scraper import scraper as type2_scraper
+from type3_scraper import scraper as type3_scraper
 
 class MultiSearch:
     """
@@ -42,15 +43,21 @@ def scrape_single_club(club_id, date, initial_search_time_str, final_search_time
         
         if club.web_scraper == "tcpmatchpoint":
             try: 
-                single_club_results = tcp_scraper2(club, date, initial_search_time_str, final_search_time_str)
+                single_club_results = type1_scraper(club, date, initial_search_time_str, final_search_time_str)
             except:
                 single_club_error = f"Error while scraping {club.name} with {club.web_scraper}."
 
         elif club.web_scraper == "easycancha":
             try: 
-                single_club_results = easy_scraper2(club, date, initial_search_time_str, final_search_time_str)
+                single_club_results = type2_scraper(club, date, initial_search_time_str, final_search_time_str)
             except:
                 single_club_error= f"Error while scraping {club.name} with {club.web_scraper}."
+        
+        elif club.web_scraper == "clublocanas":
+            try: 
+                single_club_results = type3_scraper(club, date, initial_search_time_str, final_search_time_str)
+            except:
+                single_club_error= f"Error while scraping {club.name} with {club.web_scraper}."        
 
         else :
             single_club_error = f"Error while scraping {club.name}: no valid scraper defined on clubs.json file."             
