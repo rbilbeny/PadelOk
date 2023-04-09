@@ -6,7 +6,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from type2_scraper import scraper
 from club import Club2
 
-date = "2023-03-17"
+date = "2023-04-11"
 club_id = "1677078312761x183019328151117000" #Zarhi Pade
 club_id = "1672937071915x276360887553703800" #youtopia
 initial_search_time_str = "07:00"
