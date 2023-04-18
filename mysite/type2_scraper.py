@@ -11,7 +11,7 @@ from time_block import TimeBlock2
 sys.path.append(str(Path(__file__).parent.parent.parent / 'Security'))
 from padelok_secure import SCRAPESTACK_KEY
 
-PROXY_ACTIVE = False
+PROXY_ACTIVE = True
 API_KEY = SCRAPESTACK_KEY
 MAX_TRIES = 8
 
